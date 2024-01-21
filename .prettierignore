@@ -1,0 +1,9 @@
+# Ignore artifacts:
+.husky
+build
+nginx
+node_modules
+public
+Dockerfile
+yarn.lock
+*.d.ts
