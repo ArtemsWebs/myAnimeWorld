@@ -1,58 +1,18 @@
-'use client';
-
-import { useCallback, useState } from 'react';
 import BaseInput from '@/app/_widget/BaseInput/BaseInput';
-import { signIn } from 'next-auth/react';
-import axios from 'axios';
-import { useRouter } from 'next/navigation';
+import { BaseAuthComponentProps } from '@/app/auth/components/Auth.types';
 
-const registerUser = async (user: {
-  name: string;
-  password: string;
-  email: string;
-}) => {
-  return await axios.post('/home/auth/api', user);
-};
-
-const authUser = async (email: string, password: string, router: any) => {
-  try {
-    console.log('Я тут!');
-    await signIn('credentials', {
-      email,
-      password,
-      redirect: false,
-      callbackUrl: '/',
-    });
-    router.push('/');
-  } catch (error) {
-    console.log('Я тут');
-    console.log(error);
-  }
-};
-
-const AuthGrowUpAnimation = () => {
-  const router = useRouter();
-
-  const [authMode, setAuthMode] = useState<'signIn' | 'signUp'>('signUp');
-
-  const [email, setEmail] = useState('');
-
-  const [password, setPassword] = useState('');
-
-  const [name, setName] = useState('');
-
-  const loginHandler = useCallback(async () => {
-    await authUser(email, password, router);
-  }, [email, password, router]);
-
-  const registerUserHandler = useCallback(
-    async (user: any) => {
-      await registerUser(user);
-      await loginHandler();
-    },
-    [loginHandler],
-  );
-
+const AuthGrowUpAnimation = ({
+  name,
+  nameChangeHandler,
+  passwordChangeHandler,
+  emailChangeHandler,
+  authChangeHandler,
+  registerHandler,
+  loginHandler,
+  password,
+  email,
+  authMode,
+}: BaseAuthComponentProps) => {
   return (
     <div className="max-w-[400px] min-h-[360px] h-[450px] mx-auto mb-0 mt-20 relative">
       <div
@@ -67,7 +27,7 @@ const AuthGrowUpAnimation = () => {
         >
           <p
             className="block text-2xl font-medium leading-3 text-red-500 pb-4 text-center cursor-pointer"
-            onClick={() => setAuthMode('signUp')}
+            onClick={() => authChangeHandler('signUp')}
           >
             Регистрация
           </p>
@@ -75,7 +35,7 @@ const AuthGrowUpAnimation = () => {
             <BaseInput
               type="text"
               label="Email"
-              onChange={(e) => setEmail(e.currentTarget.value)}
+              onChange={(e) => emailChangeHandler(e.currentTarget.value)}
               value={email}
             />
           </div>
@@ -84,7 +44,7 @@ const AuthGrowUpAnimation = () => {
               type="text"
               label="User name"
               value={name}
-              onChange={(e) => setName(e.currentTarget.value)}
+              onChange={(e) => nameChangeHandler(e.currentTarget.value)}
             />
           </div>
           <div className="mt-2">
@@ -92,13 +52,11 @@ const AuthGrowUpAnimation = () => {
               type="password"
               label="Password"
               value={password}
-              onChange={(e) => setPassword(e.currentTarget.value)}
+              onChange={(e) => passwordChangeHandler(e.currentTarget.value)}
             />
           </div>
           <button
-            onClick={async () =>
-              await registerUserHandler({ email, password, name })
-            }
+            onClick={async () => await registerHandler()}
             className="flex
             w-full
             justify-center
@@ -140,7 +98,7 @@ const AuthGrowUpAnimation = () => {
         <p
           className={`absolute ${authMode === 'signIn' ? 'transition ease-in-out duration-1000 -translate-y-[120px]' : 'transition ease-in-out duration-1000 -translate-y-0]'} text-center text-2xl font-medium leading-3 text-red-500 cursor-pointer`}
           onClick={() => {
-            setAuthMode('signIn');
+            authChangeHandler('signIn');
           }}
         >
           Авторизация
@@ -149,9 +107,23 @@ const AuthGrowUpAnimation = () => {
           className={`space-y-6 w-full 2 px-8 py-8 ${authMode === 'signIn' ? 'transition-all ease-in-out duration-1000 visible' : 'transition-all ease-in-out duration-500 invisible opacity-0 '}`}
           action="#"
           method="POST"
+          onSubmit={(e) => {
+            e.preventDefault();
+          }}
         >
-          <BaseInput type="text" label="Email" />
-          <BaseInput type="password" label="Password" className={'mt-2'} />
+          <BaseInput
+            type="text"
+            label="Email"
+            value={email}
+            onChange={(e) => emailChangeHandler(e.currentTarget.value)}
+          />
+          <BaseInput
+            type="password"
+            label="Password"
+            className={'mt-2'}
+            value={password}
+            onChange={(e) => passwordChangeHandler(e.currentTarget.value)}
+          />
           <button
             onClick={async () => await loginHandler()}
             type="submit"

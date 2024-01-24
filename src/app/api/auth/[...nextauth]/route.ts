@@ -2,7 +2,6 @@ import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import prismadb from '@/../lib/prismaDb';
 import { compare } from 'bcrypt';
-require('dotenv').config({ path: '.env.local' });
 
 const handler = NextAuth({
   providers: [

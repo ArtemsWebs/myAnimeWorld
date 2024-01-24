@@ -1,5 +1,4 @@
-const Main = () => {
-  return <div></div>;
+const Home = () => {
+  return <div>"Welcome to Anime World"</div>;
 };
-
-export default Main;
+export default Home;
