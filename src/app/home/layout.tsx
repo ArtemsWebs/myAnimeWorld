@@ -22,7 +22,7 @@ export default function HomeLayout({
     <div
       ref={mainContainerRef}
       onMouseMove={(event) => mouseMoveEffect(event)}
-      className={`relative animated h-full w-full bg-[url('/yanderes.jpg')] bg-cover bg-repeat-round origin-bottom `}
+      className={`relative animated h-full w-full bg-[url('/yanderes.jpg')] bg-cover bg-repeat-round origin-`}
     >
       <Image src="/logo.svg" width={200} height={200} alt="Logo missing" />
       {children}
