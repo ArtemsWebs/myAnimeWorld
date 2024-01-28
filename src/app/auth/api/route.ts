@@ -1,22 +1,20 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { compare, hash } from 'bcrypt';
+import { NextApiRequest } from 'next';
+import { hash } from 'bcrypt';
 import prismadb from '@/../lib/prismaDb';
-import NextAuth from 'next-auth';
-import Credentials from 'next-auth/providers/credentials';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(req: NextApiRequest, res: Response) {
   if (req.method !== 'POST') {
-    return res.status(405).end();
+    return new Response('Error: 405', { status: 405 });
   }
   //@ts-expect-error странные дело но req.body не пашет https://stackoverflow.com/questions/76369742/nextjs13-api-request-body-is-null-in-api-handler
   const body = await req.json();
 
   if (!body) throw new Error('Юзер не передан');
   try {
-    console.log(body);
     const { email, name, password } = body;
+
     const existingUser = await prismadb.user.findUnique({
       where: { email: email },
     });
@@ -33,6 +31,9 @@ export async function POST(req: NextApiRequest, res: Response) {
     return Response.json(user);
   } catch (error) {
     console.log(error);
-    return Response.status(400);
+    return new Response('Error: 400', {
+      status: 400,
+      statusText: 'Непредвиденная ошибка',
+    });
   }
 }

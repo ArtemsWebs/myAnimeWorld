@@ -4,16 +4,12 @@ import { useCallback, useMemo, useState } from 'react';
 import BaseAuth from '@/app/auth/components/BaseAuth';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
-import axios from 'axios';
-import {
-  AuthSwitcherProps,
-  AuthType,
-  User,
-} from '@/app/auth/components/Auth.types';
+import { AuthSwitcherProps, User } from '@/app/auth/components/Auth.types';
 import AuthGrowUpAnimation from '@/app/auth/components/AuthGrowUpAnimation';
+import { axiosInstance } from '@/app/api/axios/axiosInstans';
 
 const registerUser = async (user: User) => {
-  return await axios.post('/auth/api', user);
+  return await axiosInstance.post('/auth/api', user);
 };
 
 const authUser = async (email: string, password: string, router: any) => {
@@ -33,7 +29,7 @@ const authUser = async (email: string, password: string, router: any) => {
 const AuthSwitcher = ({ authType }: AuthSwitcherProps) => {
   const router = useRouter();
 
-  const [authMode, setAuthMode] = useState<'signIn' | 'signUp'>('signUp');
+  const [authMode, setAuthMode] = useState<'signIn' | 'signUp'>('signIn');
 
   const [email, setEmail] = useState('');
 
@@ -49,8 +45,6 @@ const AuthSwitcher = ({ authType }: AuthSwitcherProps) => {
     await registerUser({ name, password, email });
     await loginHandler();
   }, [loginHandler, name]);
-
-  console.log(authMode);
 
   const actualAuth = useMemo(() => {
     switch (authType) {

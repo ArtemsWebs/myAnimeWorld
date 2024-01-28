@@ -1,16 +1,20 @@
-import NextAuth from 'next-auth';
+import NextAuth, { NextAuthOptions } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import prismadb from '@/../lib/prismaDb';
 import { compare } from 'bcrypt';
+import GoogleProvider from 'next-auth/providers/google';
+import GithubProvider from 'next-auth/providers/github';
 
-const handler = NextAuth({
+import { PrismaAdapter } from '@next-auth/prisma-adapter';
+import prismaDb from '@/../lib/prismaDb';
+import { ShikimoriProvider } from '@/app/api/Providers/ShikimoriProvider';
+
+export const nextAuthOptions: NextAuthOptions = {
   providers: [
     Credentials({
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password)
           throw new Error('Укажите логин и пароль');
-
-        console.log(credentials);
 
         const user = await prismadb.user.findUnique({
           where: { email: credentials.email },
@@ -21,7 +25,7 @@ const handler = NextAuth({
 
         const isCorrectPassword = await compare(
           credentials.password,
-          user.hashedPassword,
+          user?.hashedPassword,
         );
         if (!isCorrectPassword) throw new Error('Некоректный пароль');
 
@@ -34,9 +38,23 @@ const handler = NextAuth({
         password: { label: 'Password', type: 'password' },
       },
     }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_ID || '',
+      clientSecret: process.env.GOOGLE_SECRET || '',
+      allowDangerousEmailAccountLinking: true,
+    }),
+    GithubProvider({
+      clientId: process.env.GITHUB_ID || '',
+      clientSecret: process.env.GITHUB_SECRET || '',
+    }),
+    ShikimoriProvider({
+      clientId: process.env.SHIKIMORI_ID || '',
+      clientSecret: process.env.SHIKIMORI_SECRET || '',
+    }),
   ],
-  pages: { signIn: '/home/auth' },
+  pages: { signIn: '/auth' },
   debug: process.env.NODE_ENV === 'development',
+  adapter: PrismaAdapter(prismaDb),
   session: {
     strategy: 'jwt',
   },
@@ -44,6 +62,8 @@ const handler = NextAuth({
   jwt: {
     secret: process.env.NEXT_JWT_SECRET,
   },
-});
+};
+
+const handler = NextAuth({ ...nextAuthOptions });
 
 export { handler as GET, handler as POST };
