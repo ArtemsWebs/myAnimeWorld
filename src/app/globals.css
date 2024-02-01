@@ -4,6 +4,7 @@
 
 
 html{
+  min-height: 100vh;
   height: 100vh;
 }
 :root {
@@ -22,6 +23,7 @@ html{
 
 body {
   color: rgb(var(--foreground-rgb));
+  min-height: 100vh;
   height: 100vh;
   background: linear-gradient(
       to bottom,
