@@ -3,6 +3,7 @@ import { LayoutBackgroundWrapperProps } from '@/app/_widget/LoyuatBackgroundWrap
 import { MouseEvent, MutableRefObject, useRef } from 'react';
 import Image from 'next/image';
 import Navbar from '@/app/_widget/Navbar/Navbar';
+import Show from '@/app/_widget/Show/Show';
 
 const mouseMoveEffect = (
   e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>,
@@ -27,6 +28,8 @@ const LayoutBackgroundWrapper = ({
 }: LayoutBackgroundWrapperProps) => {
   const isAuth = mode === 'auth';
 
+  const bg = isAuth ? 'bg-[url(/image/yanderes.jpg)]' : 'bg-["#323232"]';
+
   const mainContainerRef = useRef<HTMLDivElement | null>(null);
   return (
     <div
@@ -34,13 +37,26 @@ const LayoutBackgroundWrapper = ({
       onMouseMove={(event) => {
         if (isAuth) mouseMoveEffect(event, mainContainerRef);
       }}
-      className={`relative animated h-full w-full bg-[url('/yanderes.jpg')] bg-cover bg-repeat-round origin-`}
+      className={
+        isAuth
+          ? `relative animated h-full w-full bg-[url(/image/yanderes.jpg)] bg-cover bg-repeat-round`
+          : `relative animated h-full w-full bg-[#323232] bg-cover bg-repeat-round origin-`
+      }
     >
-      <div className="flex bg-[#0e030b]">
-        <Image src="/logo.svg" width={200} height={200} alt="Logo missing" />
-        <Navbar menuItems={menuItems} />
+      <div
+        className={`relative flex bg-[${isAuth ? '#0e030b' : 'inherit'}] z-20`}
+      >
+        <Image
+          src="/image/logo.svg"
+          width={200}
+          height={200}
+          alt="Logo missing"
+        />
+        <Show when={!isAuth}>
+          <Navbar menuItems={menuItems} />
+        </Show>
       </div>
-      {children}
+      <div className={`w-full  ${!isAuth && 'bg-black'}`}>{children}</div>
     </div>
   );
 };
