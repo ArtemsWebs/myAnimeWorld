@@ -10,34 +10,7 @@ import AnimeList from '@/app/home/component/AnimeList';
 
 import { axiosInstance } from '@/app/api/axios/axiosInstans';
 import useSWR from 'swr';
-
-type AnimeRequestParams = {
-  page?: number;
-  limit?: number;
-  type?:
-    | 'tv'
-    | 'movie'
-    | 'ova'
-    | 'special'
-    | 'ona'
-    | 'music'
-    | 'cm'
-    | 'pv'
-    | 'tv_special';
-  status?: 'airing' | 'complete' | 'upcoming';
-  order_by:
-    | 'mal_id'
-    | 'title'
-    | 'start_date'
-    | 'end_date'
-    | 'episodes'
-    | 'score'
-    | 'scored_by'
-    | 'rank'
-    | 'popularity'
-    | 'members'
-    | 'favorites';
-};
+import { AnimeRequestParams } from '@/app/home/types';
 
 const animeFetcher = async ({
   page,

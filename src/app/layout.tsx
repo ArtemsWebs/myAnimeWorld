@@ -8,11 +8,17 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/effect-fade';
-import { Navigation, Pagination, EffectFade } from 'swiper/modules';
+import {
+  Navigation,
+  Pagination,
+  EffectFade,
+  Mousewheel,
+  Keyboard,
+} from 'swiper/modules';
 
 //@NOTE https://stackoverflow.com/questions/50009818/javascript-swiper-native-navigation-function-is-not-working
 import SwiperCore from 'swiper';
-SwiperCore.use([Navigation, Pagination, EffectFade]);
+SwiperCore.use([Navigation, Pagination, EffectFade, Mousewheel, Keyboard]);
 
 const inter = Inter({ subsets: ['latin'] });
 

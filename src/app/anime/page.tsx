@@ -1,0 +1,3 @@
+const AnimeRouterPage = () => {
+  return <></>;
+};
