@@ -1,11 +1,4 @@
-import {
-  HTMLAttributes,
-  ReactElement,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import { HTMLAttributes, useEffect, useMemo, useRef, useState } from 'react';
 import videojs from 'video.js';
 import 'video.js/dist/video-js.css';
 import Player from 'video.js/dist/types/player';
@@ -46,38 +39,13 @@ const defaultVideoOptions = {
   },
 };
 
-//@TODO наверное стоит получать эти параметры с бэка
-const dubberDefaultOptions = [
-  {
-    value: 'animeVost',
-    label: 'animeVost',
-  },
-  {
-    value: 'AniLibria_TV',
-    label: 'AniLibria_TV',
-  },
-];
-
-const episodeDefaultOptions = [
-  {
-    value: '1',
-    label: 'Эпизод 1',
-  },
-  {
-    value: '2',
-    label: 'Эпизод 2',
-  },
-];
-
 export const VideoJS = ({ options, onReady, className }: VideoJsProps) => {
   const videoRef = useRef<HTMLDivElement | null>(null);
   const playerRef = useRef<Player | null>(null);
 
-  const [selectedDubber, setSelectedDubber] = useState(dubberDefaultOptions[0]);
-
   const actualVideoOptions = useMemo(
     () => ({ ...defaultVideoOptions, ...options }),
-    [],
+    [options],
   );
 
   useEffect(() => {
@@ -123,18 +91,6 @@ export const VideoJS = ({ options, onReady, className }: VideoJsProps) => {
   return (
     <div className={classNames(className, 'rounded-md')} data-vjs-player>
       <div ref={videoRef} className={'rounded-lg'} />
-      <div className={'flex justify-between'}>
-        <Select
-          defaultValue={selectedDubber}
-          onChange={(value) => setSelectedDubber(value)}
-          options={dubberDefaultOptions}
-        />
-        <Select
-          defaultValue={selectedOption}
-          onChange={setSelectedOption}
-          options={options}
-        />
-      </div>
     </div>
   );
 };

@@ -141,3 +141,8 @@ export type AnimeRequestParams = {
     | 'members'
     | 'favorites';
 };
+
+export type BaseOption = {
+  value: string;
+  label: string;
+};

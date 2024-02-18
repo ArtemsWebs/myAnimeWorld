@@ -3,9 +3,8 @@ import { AnimeFull } from '@/app/home/types';
 import InfoRow from '@/app/_widget/InfoRow/InfoRow';
 import Typography from '@/app/_widget/Typography';
 import Chips from '@/app/_widget/Chips/Chips';
-import Player from '@/app/home/anime/[animeId]/_component/Player/Player';
-import { Player as PlayerType } from 'video.js/dist/types/player';
 import { useMemo } from 'react';
+import AnimePlayer from '@/app/home/anime/[animeId]/_component/AnimePlayer/AnimePlayer';
 
 interface AnimeCardProps {
   animeFullInfo?: AnimeFull;
@@ -40,102 +39,72 @@ const AnimeCard = ({ animeFullInfo }: AnimeCardProps) => {
           allowFullScreen
         ></iframe>
       </div>
-      <div className={'w-full flex gap-10 justify-center text-white pt-10 '}>
-        <img
-          src={animeFullInfo?.currentAnime.images.jpg?.large_image_url}
-          className={'rounded-lg'}
-        />
-        <div className={'w-[700px]'}>
-          <div>
-            <Typography variant={'title'}>
-              {animeFullInfo?.currentAnime.title}
-            </Typography>
-            <div className={'flex gap-3'}>
-              {animeFullInfo?.currentAnime.genres.map((gener) => (
-                <Chips key={gener.mal_id} chipsName={gener.name} />
-              ))}
+      <div className={'mx-[20%] flex-col items-center'}>
+        <div className={'w-full flex gap-10 text-white pt-10'}>
+          <img
+            src={animeFullInfo?.currentAnime.images.jpg?.large_image_url}
+            className={'rounded-lg'}
+          />
+          <div className={'w-[700px]'}>
+            <div>
+              <Typography variant={'title'}>
+                {animeFullInfo?.currentAnime.title}
+              </Typography>
+              <div className={'flex gap-3'}>
+                {animeFullInfo?.currentAnime.genres.map((gener) => (
+                  <Chips key={gener.mal_id} chipsName={gener.name} />
+                ))}
+              </div>
             </div>
+            <InfoRow
+              title={'Рейтинг'}
+              value={animeFullInfo?.currentAnime.rank}
+              className={'py-1'}
+            />
+            <InfoRow
+              title="Сезон"
+              value={animeFullInfo?.currentAnime.season}
+              className={'py-1'}
+            />
+            <InfoRow
+              title="Эпизоды"
+              value={animeFullInfo?.currentAnime.episodes}
+              className={'py-1'}
+            />
+            <InfoRow
+              title="Возрастной рейтинг"
+              value={animeFullInfo?.currentAnime.rating}
+              className={'py-1'}
+            />
+            <InfoRow
+              title="Режисеры"
+              value={animeFullInfo?.currentAnime.producers
+                .map((producer) => producer.name)
+                .join(', ')}
+              className={'py-1'}
+            />
+            <InfoRow
+              title="Студии"
+              value={animeFullInfo?.currentAnime.studios
+                .map((studio) => studio.name)
+                .join(', ')}
+              className={'py-1'}
+            />
+            <InfoRow
+              title="Лицензоры"
+              value={animeFullInfo?.currentAnime.licensors
+                .map((licensor) => licensor.name)
+                .join(', ')}
+              className={'py-1'}
+            />
           </div>
-          <InfoRow
-            title={'Рейтинг'}
-            value={animeFullInfo?.currentAnime.rank}
-            className={'py-1'}
-          />
-          <InfoRow
-            title="Сезон"
-            value={animeFullInfo?.currentAnime.season}
-            className={'py-1'}
-          />
-          <InfoRow
-            title="Эпизоды"
-            value={animeFullInfo?.currentAnime.episodes}
-            className={'py-1'}
-          />
-          <InfoRow
-            title="Возрастной рейтинг"
-            value={animeFullInfo?.currentAnime.rating}
-            className={'py-1'}
-          />
-          <InfoRow
-            title="Режисеры"
-            value={animeFullInfo?.currentAnime.producers
-              .map((producer) => producer.name)
-              .join(', ')}
-            className={'py-1'}
-          />
-          <InfoRow
-            title="Студии"
-            value={animeFullInfo?.currentAnime.studios
-              .map((studio) => studio.name)
-              .join(', ')}
-            className={'py-1'}
-          />
-          <InfoRow
-            title="Лицензоры"
-            value={animeFullInfo?.currentAnime.licensors
-              .map((licensor) => licensor.name)
-              .join(', ')}
-            className={'py-1'}
-          />
         </div>
+        <AnimePlayer
+          animeFullInfo={animeFullInfo?.currentAnime}
+          className={'py-6'}
+          playerClassname={'flex justify-center'}
+        />
       </div>
-      <Player
-        className={'flex justify-center py-6'}
-        options={{
-          controls: true,
-          controlBar: {
-            skipButtons: {
-              backward: 10,
-              forward: 10,
-            },
-          },
-          sources: [
-            {
-              src: animeLink,
-              type: 'video/mp4',
-            },
-          ],
-          userActions: {
-            hotkeys: function (event) {
-              const playerContext = this as PlayerType;
-              // `this` is the player in this context
-              // `space` key = pause or start check video status
-              if (event.which === 32) {
-                if (!playerContext.paused()) playerContext.pause();
-                else playerContext.play();
-              }
-              // `right arrow` key = forward video for some second
-              if (event.which === 39) {
-                playerContext.currentTime(playerContext.currentTime() + 10);
-              }
-              // `left arrow` key = backward video for some second
-              if (event.which === 37) {
-                playerContext.currentTime(playerContext.currentTime() - 10);
-              }
-            },
-          },
-        }}
-      />
     </div>
   );
 };
