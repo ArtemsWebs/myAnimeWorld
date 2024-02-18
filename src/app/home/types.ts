@@ -49,6 +49,12 @@ export type Genre = {
   url: string;
 };
 
+interface Producer extends Genre {}
+
+interface Studio extends Genre {}
+
+interface Licensor extends Genre {}
+
 export type AnimeT = {
   mal_id: number;
   url: string;
@@ -81,6 +87,32 @@ export type AnimeT = {
   broadcast: Broadcast;
   genres: Genre[];
 };
+
+type Promo = {
+  title: string;
+  trailer: Trailer;
+};
+type Episode = {
+  mal_id: 0;
+  url: string;
+  title: string;
+  episode: string;
+  images: Images;
+};
+
+type Video = {
+  promo: Promo[];
+  episodes: Episode[];
+};
+
+export interface AnimeFull extends AnimeT {
+  currentAnime: AnimeT & {
+    producers: Producer[];
+    studios: Studio[];
+    licensors: Licensor[];
+  };
+  currentVideos: Video;
+}
 
 export type AnimeRequestParams = {
   page?: number;

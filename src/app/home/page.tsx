@@ -65,7 +65,7 @@ const Home = () => {
           autoPlay={true}
           muted
           loop={true}
-          src="/videos/videoAnime.mp4"
+          src="/videos/background/videoAnime.mp4"
           className={
             'w-full absolute top-0 object-cover brightness-50 h-[50.25vw]'
           }
