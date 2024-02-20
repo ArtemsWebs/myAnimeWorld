@@ -1,8 +1,8 @@
 import { HTMLAttributes, useMemo, useState } from 'react';
 import classNames from 'classnames';
-import Select from 'react-select';
 import VideoJS from '@/app/_widget/Player/Player';
 import { AnimeFull, BaseOption } from '@/app/home/types';
+import CustomSelect from '@/app/_widget/Select/Select';
 
 interface AnimePlayer extends HTMLAttributes<HTMLDivElement> {
   animeFullInfo: AnimeFull['currentAnime'];
@@ -60,9 +60,9 @@ export const AnimePlayer = ({
   );
 
   return (
-    <div className={classNames(className, 'items-center flex-col col-auto')}>
+    <div className={classNames(className, 'flex-col col-auto w-[1280px]')}>
       <VideoJS
-        className={playerClassname}
+        className={classNames(playerClassname, 'w-full')}
         options={{
           sources: [
             {
@@ -72,13 +72,13 @@ export const AnimePlayer = ({
           ],
         }}
       />
-      <div className={'flex justify-center gap-10 pt-10'}>
-        <Select
+      <div className={'flex justify-center gap-10 pt-10 w-full'}>
+        <CustomSelect
           value={selectedDubber}
           onChange={setSelectedDubber}
           options={dubberDefaultOptions}
         />
-        <Select
+        <CustomSelect
           value={selectedEpisode}
           onChange={setSelectedEpisode}
           options={episodeDefaultOptions}

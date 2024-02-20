@@ -56,7 +56,8 @@ const LayoutBackgroundWrapper = ({
           <Navbar menuItems={menuItems} />
         </Show>
       </div>
-      <div className={`w-full  ${!isAuth && 'bg-black'}`}>{children}</div>
+      <div className={`w-full  ${!isAuth && 'bg-gray-600'}`}>{children}</div>
+      <div className={'w-full min-h-[100px] bg-gray-600'}></div>
     </div>
   );
 };

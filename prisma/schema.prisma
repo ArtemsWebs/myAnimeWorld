@@ -69,6 +69,13 @@ model Animes {
   duration    String
 }
 
+model Dubbers {
+  id          String   @id @default(cuid())
+  description String
+  persons     String[]
+  logoUrl     String
+}
+
 enum Role {
   USER
   ADMIN

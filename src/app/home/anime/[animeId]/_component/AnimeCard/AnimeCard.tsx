@@ -5,6 +5,7 @@ import Typography from '@/app/_widget/Typography';
 import Chips from '@/app/_widget/Chips/Chips';
 import { useMemo } from 'react';
 import AnimePlayer from '@/app/home/anime/[animeId]/_component/AnimePlayer/AnimePlayer';
+import Accordion from '@/app/_widget/Accordion/Accordion';
 
 interface AnimeCardProps {
   animeFullInfo?: AnimeFull;
@@ -39,7 +40,7 @@ const AnimeCard = ({ animeFullInfo }: AnimeCardProps) => {
           allowFullScreen
         ></iframe>
       </div>
-      <div className={'mx-[20%] flex-col items-center'}>
+      <div className={'px-[25%] flex-col items-center'}>
         <div className={'w-full flex gap-10 text-white pt-10'}>
           <img
             src={animeFullInfo?.currentAnime.images.jpg?.large_image_url}
@@ -102,8 +103,12 @@ const AnimeCard = ({ animeFullInfo }: AnimeCardProps) => {
         <AnimePlayer
           animeFullInfo={animeFullInfo?.currentAnime}
           className={'py-6'}
-          playerClassname={'flex justify-center'}
+          playerClassname={'flex'}
         />
+        <div className="flex-col gap-10">
+          <Accordion title={'Хронология'}>Контент</Accordion>
+          <Accordion title={'Персонажи'}>Контент</Accordion>
+        </div>
       </div>
     </div>
   );
