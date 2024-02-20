@@ -102,12 +102,12 @@ const AnimeCard = ({ animeFullInfo }: AnimeCardProps) => {
         </div>
         <AnimePlayer
           animeFullInfo={animeFullInfo?.currentAnime}
-          className={'py-6'}
+          className={'pt-6 pb-4'}
           playerClassname={'flex'}
         />
-        <div className="flex-col gap-10">
-          <Accordion title={'Хронология'}>Контент</Accordion>
-          <Accordion title={'Персонажи'}>Контент</Accordion>
+        <div className="flex flex-col gap-10 pt-10">
+          <Accordion title="Хронология">Контент</Accordion>
+          <Accordion title="Персонажи">Контент</Accordion>
         </div>
       </div>
     </div>

@@ -72,7 +72,7 @@ export const AnimePlayer = ({
           ],
         }}
       />
-      <div className={'flex justify-center gap-10 pt-10 w-full'}>
+      <div className={'flex justify-center gap-10 pt-4 w-full'}>
         <CustomSelect
           value={selectedDubber}
           onChange={setSelectedDubber}

@@ -22,14 +22,15 @@ const Accordion = ({
       {...props}
       className={classNames(
         className,
-        'w-full min-h-5 bg-gray-400 rounded-lg px-6 py-8',
+        'w-full min-h-5 bg-gray-400 rounded-lg px-6 py-6',
       )}
     >
-      <div className={'flex items-center gap-10'}>
+      <div className={'flex justify-between items-center gap-10'}>
         <Typography variant={'title'} className={'text-white'}>
           {title}
         </Typography>
         <IconButton
+          className={`transition duration-300 ${visibleContent ? 'rotate-0' : 'rotate-180'}`}
           onClick={() => setVisibleContent((prevState) => !prevState)}
         >
           <IoIosArrowDown width={'24px'} height={'24px'} />

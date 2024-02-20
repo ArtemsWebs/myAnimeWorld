@@ -1,5 +1,6 @@
 import { NavbarProps } from '@/app/_widget/Navbar/Navbar.types';
 import NavbarItem from '@/app/_widget/Navbar/component/NavbarItem';
+import { useRouter } from 'next/navigation';
 
 const Navbar = ({
   menuItems,
@@ -7,6 +8,7 @@ const Navbar = ({
   itemStyles,
   ...props
 }: NavbarProps) => {
+  const router = useRouter();
   return (
     <div
       className="flex gap-4 align-middle items-center"
@@ -16,6 +18,7 @@ const Navbar = ({
       {menuItems.map((menuItem) => {
         return (
           <NavbarItem
+            onClick={() => router.push(menuItem.route)}
             key={menuItem.key}
             label={menuItem.value}
             style={itemStyles}

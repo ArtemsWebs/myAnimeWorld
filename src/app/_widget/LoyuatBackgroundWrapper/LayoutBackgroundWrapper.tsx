@@ -16,10 +16,10 @@ const mouseMoveEffect = (
 };
 
 const menuItems = [
-  { key: 'home', value: 'Домой' },
-  { key: 'anime', value: 'Аниме' },
-  { key: 'manga', value: 'Манга' },
-  { key: 'favorite', value: 'Мой список' },
+  { key: 'home', value: 'Домой', route: '/home' },
+  { key: 'anime', value: 'Аниме', route: '/home' },
+  { key: 'manga', value: 'Манга', route: '/home' },
+  { key: 'favorite', value: 'Мой список', route: '/home' },
 ];
 
 const LayoutBackgroundWrapper = ({
