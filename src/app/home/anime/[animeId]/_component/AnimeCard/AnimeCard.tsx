@@ -6,14 +6,15 @@ import Chips from '@/app/_widget/Chips/Chips';
 import { useMemo } from 'react';
 import AnimePlayer from '@/app/home/anime/[animeId]/_component/AnimePlayer/AnimePlayer';
 import Accordion from '@/app/_widget/Accordion/Accordion';
+import CommentTree from '@/app/home/anime/[animeId]/_component/CommentTree/CommentTree';
+import useSWR from 'swr';
 
 interface AnimeCardProps {
   animeFullInfo?: AnimeFull;
 }
 
+//@TODO формат mkv не работает в video.js
 const AnimeCard = ({ animeFullInfo }: AnimeCardProps) => {
-  //@TODO формат mkv не работает в video.js
-
   const formatedTitleName = useMemo(
     () => animeFullInfo?.currentAnime?.title?.replaceAll(' ', '_'),
     [animeFullInfo],
@@ -43,7 +44,7 @@ const AnimeCard = ({ animeFullInfo }: AnimeCardProps) => {
       <div className={'px-[25%] flex-col items-center'}>
         <div className={'w-full flex gap-10 text-white pt-10'}>
           <img
-            src={animeFullInfo?.currentAnime.images.jpg?.large_image_url}
+            src={animeFullInfo?.currentAnime?.images?.jpg?.large_image_url}
             className={'rounded-lg'}
           />
           <div className={'w-[700px]'}>
@@ -52,7 +53,7 @@ const AnimeCard = ({ animeFullInfo }: AnimeCardProps) => {
                 {animeFullInfo?.currentAnime.title}
               </Typography>
               <div className={'flex gap-3'}>
-                {animeFullInfo?.currentAnime.genres.map((gener) => (
+                {animeFullInfo?.currentAnime?.genres?.map((gener) => (
                   <Chips key={gener.mal_id} chipsName={gener.name} />
                 ))}
               </div>
@@ -79,23 +80,23 @@ const AnimeCard = ({ animeFullInfo }: AnimeCardProps) => {
             />
             <InfoRow
               title="Режисеры"
-              value={animeFullInfo?.currentAnime.producers
-                .map((producer) => producer.name)
-                .join(', ')}
+              value={animeFullInfo?.currentAnime?.producers
+                ?.map((producer) => producer.name)
+                ?.join(', ')}
               className={'py-1'}
             />
             <InfoRow
               title="Студии"
-              value={animeFullInfo?.currentAnime.studios
-                .map((studio) => studio.name)
-                .join(', ')}
+              value={animeFullInfo?.currentAnime?.studios
+                ?.map((studio) => studio.name)
+                ?.join(', ')}
               className={'py-1'}
             />
             <InfoRow
               title="Лицензоры"
-              value={animeFullInfo?.currentAnime.licensors
-                .map((licensor) => licensor.name)
-                .join(', ')}
+              value={animeFullInfo?.currentAnime?.licensors
+                ?.map((licensor) => licensor.name)
+                ?.join(', ')}
               className={'py-1'}
             />
           </div>
@@ -109,6 +110,7 @@ const AnimeCard = ({ animeFullInfo }: AnimeCardProps) => {
           <Accordion title="Хронология">Контент</Accordion>
           <Accordion title="Персонажи">Контент</Accordion>
         </div>
+        <CommentTree />
       </div>
     </div>
   );

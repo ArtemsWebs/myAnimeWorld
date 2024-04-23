@@ -8,7 +8,7 @@ export async function GET(req: NextRequest, res: Response) {
   if (!animeId) return;
   try {
     const currentAnime = await fetch(
-      `https://api.jikan.moe/v4/anime/${animeId}/full`,
+      `${process.env.BACKEND_BASE_URL}/anime/${animeId}`,
     ).then((response) => response.json());
 
     const currentAnimeVideo = await fetch(
@@ -16,7 +16,7 @@ export async function GET(req: NextRequest, res: Response) {
     ).then((response) => response.json());
 
     return Response.json({
-      currentAnime: currentAnime.data,
+      currentAnime: currentAnime,
       currentVideos: currentAnimeVideo.data,
     });
   } catch (e) {
