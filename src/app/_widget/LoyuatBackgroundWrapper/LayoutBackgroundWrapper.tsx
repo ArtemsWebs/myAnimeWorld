@@ -4,6 +4,7 @@ import { MouseEvent, MutableRefObject, useRef } from 'react';
 import Image from 'next/image';
 import Navbar from '@/app/_widget/Navbar/Navbar';
 import Show from '@/app/_widget/Show/Show';
+import { UserIcon } from '@/app/home/component/UserIcon';
 
 const mouseMoveEffect = (
   e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>,
@@ -27,7 +28,6 @@ const LayoutBackgroundWrapper = ({
   children,
 }: LayoutBackgroundWrapperProps) => {
   const isAuth = mode === 'auth';
-
   const bg = isAuth ? 'bg-[url(/image/yanderes.jpg)]' : 'bg-["#323232"]';
 
   const mainContainerRef = useRef<HTMLDivElement | null>(null);
@@ -44,17 +44,20 @@ const LayoutBackgroundWrapper = ({
       }
     >
       <div
-        className={`relative flex bg-[${isAuth ? '#0e030b' : 'inherit'}] z-20`}
+        className={`relative flex bg-[${isAuth ? '#0e030b' : 'inherit'}] z-20 items-center justify-between pr-[50px]`}
       >
-        <Image
-          src="/image/logo.svg"
-          width={200}
-          height={200}
-          alt="Logo missing"
-        />
-        <Show when={!isAuth}>
-          <Navbar menuItems={menuItems} />
-        </Show>
+        <div className={`flex`}>
+          <Image
+            src="/image/logo.svg"
+            width={200}
+            height={200}
+            alt="Logo missing"
+          />
+          <Show when={!isAuth}>
+            <Navbar menuItems={menuItems} />
+          </Show>
+        </div>
+        {!isAuth && <UserIcon />}
       </div>
       <div className={`w-full  ${!isAuth && 'bg-gray-600'}`}>{children}</div>
       <div className={'w-full min-h-[100px] bg-gray-600'}></div>

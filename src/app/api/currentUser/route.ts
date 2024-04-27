@@ -8,7 +8,6 @@ export async function GET(req: Request, res: Response) {
 
     return Response.json({ currentUser });
   } catch (e) {
-    debugger;
     console.log(e);
   }
 }

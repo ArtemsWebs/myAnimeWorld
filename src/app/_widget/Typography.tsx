@@ -4,11 +4,17 @@ type TypographyVariant = 'title' | 'subtitle' | 'button' | 'regular';
 
 interface TypographyProps extends HTMLAttributes<HTMLSpanElement> {
   children: ReactNode;
+  component?: 'p' | 'span';
   variant: TypographyVariant;
   className?: string;
 }
 
-const Typography = ({ children, variant, ...props }: TypographyProps) => {
+const Typography = ({
+  children,
+  variant,
+  component = 'span',
+  ...props
+}: TypographyProps) => {
   const classNamesForSpan = useMemo(() => {
     switch (variant) {
       case 'title':
@@ -20,13 +26,23 @@ const Typography = ({ children, variant, ...props }: TypographyProps) => {
     }
   }, [variant]);
   return (
-    <span
-      {...props}
-      className={`${classNamesForSpan} ${props.className ?? ''}`}
-    >
-      {children}
-    </span>
+    <>
+      {component === 'span' ? (
+        <span
+          {...props}
+          className={`${classNamesForSpan} ${props.className ?? ''}`}
+        >
+          {children}
+        </span>
+      ) : (
+        <p
+          {...props}
+          className={`${classNamesForSpan} ${props.className ?? ''}`}
+        >
+          {children}
+        </p>
+      )}
+    </>
   );
 };
-
 export default Typography;

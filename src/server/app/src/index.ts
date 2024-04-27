@@ -25,7 +25,7 @@ const app = new Elysia()
 
         const animeData = foreignAnime.data as AnimeT;
 
-        const newAnime = await prismaDb.animes.create({
+        return await prismaDb.animes.create({
           include: {
             genres: true,
             studios: true,
@@ -49,6 +49,8 @@ const app = new Elysia()
             score: animeData.score,
             scoredBy: animeData.scored_by,
             rank: animeData.rank,
+            rating: animeData.rating,
+            season: animeData.season,
             popularity: animeData.popularity,
             images: animeData.images,
             members: animeData.members,
@@ -112,7 +114,6 @@ const app = new Elysia()
             },
           },
         });
-        return newAnime;
       } else {
         return anime;
       }
@@ -138,6 +139,11 @@ const app = new Elysia()
   .get('/anime/genres/:animeId', async ({ params: { animeId } }) => {
     return prismaDb.genres.findMany({
       where: { animes: { id: Number(animeId) } },
+    });
+  })
+  .get('/user/me', async ({ query: { email } }) => {
+    return prismaDb.user.findUnique({
+      where: { email: email },
     });
   })
   .listen(4000);

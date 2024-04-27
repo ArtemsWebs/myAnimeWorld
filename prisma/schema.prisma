@@ -70,7 +70,7 @@ model Animes {
   trailer       Json?
   status        String?
   airing        Boolean?
-  rating        Int?
+  rating        String?
   score         Int?
   scoredBy      Int?
   rank          Int?

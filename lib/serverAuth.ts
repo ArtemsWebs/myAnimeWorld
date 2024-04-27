@@ -1,4 +1,3 @@
-import prismaDb from './prismaDb';
 import { getServerSession } from 'next-auth';
 import { nextAuthOptions } from '@/app/api/auth/[...nextauth]/route';
 
@@ -6,12 +5,9 @@ import { nextAuthOptions } from '@/app/api/auth/[...nextauth]/route';
 const serverAuth = async () => {
   const session = await getServerSession(nextAuthOptions);
 
-  console.log(session?.user?.email);
   if (!session?.user?.email) throw new Error('Логин не найден');
 
-  const currentUser = await prismaDb.user.findUnique({
-    where: { email: session.user.email },
-  });
+  const currentUser = session?.user;
 
   if (!currentUser) throw new Error('Пользователь не найден');
 

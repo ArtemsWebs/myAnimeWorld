@@ -30,7 +30,8 @@
     "react-select": "^5.8.0",
     "swiper": "^11.0.6",
     "swr": "^2.2.4",
-    "video.js": "^8.10.0"
+    "video.js": "^8.10.0",
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
     "@types/node": "^20",

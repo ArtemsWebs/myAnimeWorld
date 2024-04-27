@@ -23,7 +23,7 @@ const AnimeSwiperCard = ({ anime, ...props }: AnimeSwiperCardProps) => {
       />
       <div
         className={
-          'absolute transition ease-in-out  w-full h-full opacity-0  bg-black top-0 hover:opacity-80 duration-400 text-white px-4 pb-4'
+          'absolute transition ease-in-out rounded-lg  w-full h-full opacity-0  bg-black top-0 hover:opacity-80 duration-400 text-white px-4 pb-4'
         }
       >
         <div className={'flex flex-col  h-full justify-end'}>

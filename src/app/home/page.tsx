@@ -1,11 +1,10 @@
 'use client';
 
-import { getSession, signOut } from 'next-auth/react';
+import { getSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Show from '@/app/_widget/Show/Show';
 import { Session } from 'next-auth';
-import { useCurrentUser } from '@/app/hooks/useCurrentUser';
 import AnimeList from '@/app/home/component/AnimeList';
 
 import { axiosInstance } from '@/app/api/axios/axiosInstans';
@@ -32,7 +31,7 @@ const animeFetcher = async ({
 
 const Home = () => {
   const [session, setSession] = useState<Session | null>(null);
-  const { currentUser } = useCurrentUser();
+
   const router = useRouter();
   useEffect(() => {
     getSession().then((res) => {
@@ -45,13 +44,7 @@ const Home = () => {
 
   const [page, setPage] = useState(1);
 
-  const pagePlusOneHandler = useCallback(() => {
-    setPage((prevState) => prevState + 1);
-  }, []);
-
-  const pageMinusOneHandler = useCallback(() => {
-    setPage((prevState) => prevState - 1);
-  }, []);
+  console.log(session);
 
   const { data: animes } = useSWR(
     { page, limit: 24, status: 'airing', order_by: 'popularity' },
