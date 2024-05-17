@@ -1,4 +1,4 @@
-import BaseInput from '@/app/_widget/BaseInput/BaseInput';
+import BaseInput from '@/app/ui/BaseInput/BaseInput';
 import { BaseAuthComponentProps } from '@/app/auth/components/Auth.types';
 
 const AuthGrowUpAnimation = ({

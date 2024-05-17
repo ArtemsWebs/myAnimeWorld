@@ -1,6 +1,6 @@
-import BaseInput from '../../_widget/BaseInput/BaseInput';
+import BaseInput from '@/app/ui/BaseInput/BaseInput';
 import { BaseAuthComponentProps } from '@/app/auth/components/Auth.types';
-import Show from '@/app/_widget/Show/Show';
+import Show from '@/app/ui/Show/Show';
 
 import { FcGoogle } from 'react-icons/fc';
 import { FaGithub } from 'react-icons/fa';
@@ -8,15 +8,15 @@ import { SiShikimori } from 'react-icons/si';
 import { signIn } from 'next-auth/react';
 
 const githubOA2 = async () => {
-  await signIn('github', { callbackUrl: '/home' });
+  await signIn('github', { callbackUrl: '/home/animes/' });
 };
 
 const googleOA2 = async () => {
-  await signIn('google', { callbackUrl: '/home' });
+  await signIn('google', { callbackUrl: '/home/animes/' });
 };
 
 const shikimoriOA2 = async () => {
-  await signIn('shikimori', { callbackUrl: '/home' });
+  await signIn('shikimori', { callbackUrl: '/home/animes/' });
 };
 
 const BaseAuth = ({

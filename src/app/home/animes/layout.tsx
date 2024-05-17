@@ -1,11 +1,11 @@
 import LayoutBackgroundWrapper from '@/app/ui/LoyuatBackgroundWrapper/LayoutBackgroundWrapper';
 
-export default function AuthLayout({
+export default function HomeLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <LayoutBackgroundWrapper mode="auth">{children}</LayoutBackgroundWrapper>
+    <LayoutBackgroundWrapper mode="home">{children}</LayoutBackgroundWrapper>
   );
 }

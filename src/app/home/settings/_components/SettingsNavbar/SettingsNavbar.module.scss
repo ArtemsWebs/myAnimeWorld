@@ -1,0 +1,68 @@
+@keyframes scale-to-active {
+  from {
+    width: 30px;
+    height: 30px;
+  }
+  to {
+    width: 200px;
+    height: 40px;
+  }
+}
+@keyframes scale-to-inactive {
+  from {
+    width: 200px;
+    height: 40px;
+  }
+  to {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+@keyframes color-to-active-text {
+  from {
+    color: rgb(156 163 175 / var(--tw-text-opacity));
+  }
+  to {
+    color: #2d3748;
+  }
+}
+
+@keyframes color-to-inactive-text {
+  from {
+    color: #2d3748;
+  }
+  to {
+    color: rgb(156 163 175 / var(--tw-text-opacity));
+  }
+}
+
+.setting-navbar-item-animation {
+  animation: scale-to-active;
+  animation-name: scale-to-active;
+  animation-duration: 2s;
+  animation-fill-mode: forwards;
+  justify-content: flex-start;
+}
+
+.setting-navbar-item-reverse {
+  animation: scale-to-inactive;
+  animation-name: scale-to-inactive;
+  animation-duration: 2s;
+  animation-fill-mode: forwards;
+  justify-content: flex-start;
+}
+
+.setting-navbar-item-text-active-color {
+  animation: color-to-active-text;
+  animation-name: color-to-active-text;
+  animation-duration: 2s;
+  animation-fill-mode: forwards;
+}
+
+.setting-navbar-item-text-inactive-color {
+  animation: color-to-inactive-text;
+  animation-name: color-to-inactive-text;
+  animation-duration: 2s;
+  animation-fill-mode: forwards;
+}
