@@ -22,6 +22,7 @@ model User {
   updatedAt      DateTime  @updatedAt
   sessions       Session[] @relation(name: "SessionToUser")
   accounts       Account[] @relation(name: "AccountToUser")
+  roles          Role[]    @relation(name: "UserToRoles")
 }
 
 model Account {
@@ -137,7 +138,17 @@ model Dubbers {
   logoUrl     String
 }
 
-enum Role {
-  USER
-  ADMIN
+model Permession {
+  id      Int     @id @default(autoincrement())
+  name    String?
+  encrypt String?
+  roles   Role[]  @relation(name: "PermessionToRole")
+}
+
+model Role {
+  id         Int          @id @default(autoincrement())
+  name       String?      @unique
+  encrypt    String?
+  permession Permession[] @relation(name: "PermessionToRole")
+  User       User[]       @relation(name: "UserToRoles")
 }

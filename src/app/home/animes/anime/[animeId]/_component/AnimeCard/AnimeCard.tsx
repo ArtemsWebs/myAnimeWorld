@@ -22,8 +22,10 @@ const AnimeCard = ({ animeFullInfo }: AnimeCardProps) => {
               'w-full h-[50.25vw] absolute top-0 object-cover brightness-50'
             }
             src={
-              animeFullInfo?.currentAnime.trailer.embed_url +
-              '&autoplay=0&showinfo=0&controls=0&iv_load_policy=3&modestbranding=1&rel=0'
+              animeFullInfo?.currentAnime?.trailer?.embed_url
+                ? animeFullInfo?.currentAnime?.trailer?.embed_url +
+                  '&autoplay=0&showinfo=0&controls=0&iv_load_policy=3&modestbranding=1&rel=0'
+                : ''
             }
             title="YouTube video player"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"

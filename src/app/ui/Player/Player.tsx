@@ -1,10 +1,9 @@
 'use client';
-import { HTMLAttributes, useEffect, useMemo, useRef, useState } from 'react';
+import { HTMLAttributes, useEffect, useMemo, useRef } from 'react';
 import videojs from 'video.js';
 import 'video.js/dist/video-js.css';
 import Player from 'video.js/dist/types/player';
 import classNames from 'classnames';
-import Select from 'react-select/base';
 
 interface VideoJsProps extends HTMLAttributes<HTMLDivElement> {
   options?: any;

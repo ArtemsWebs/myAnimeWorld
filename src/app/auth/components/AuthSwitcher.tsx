@@ -19,11 +19,8 @@ const authUser = async (email: string, password: string, router: any) => {
       password,
       redirect: false,
       callbackUrl: '/',
-    });
-    router.push('/home');
-  } catch (error) {
-    console.log(error);
-  }
+    }).then(() => router.push('/home/animes'));
+  } catch (error) {}
 };
 
 const AuthSwitcher = ({ authType }: AuthSwitcherProps) => {

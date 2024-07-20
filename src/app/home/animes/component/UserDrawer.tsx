@@ -1,4 +1,4 @@
-import { Drawer } from '@/app/ui/Drawer/Drawer';
+import Drawer from '@/app/ui/Drawer/Drawer';
 import { getSession, signOut } from 'next-auth/react';
 import useSWR from 'swr';
 import Typography from '@/app/ui/Typography';

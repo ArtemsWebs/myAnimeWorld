@@ -13,7 +13,6 @@ const AnimeSwiperCard = ({ anime, ...props }: AnimeSwiperCardProps) => {
   return (
     <div
       {...props}
-      key={anime.mal_id}
       className={'group w-[300px] h-[400px] cursor-pointer relative'}
       onClick={() => router.push(`/home/animes/anime/${anime.mal_id}`)}
     >

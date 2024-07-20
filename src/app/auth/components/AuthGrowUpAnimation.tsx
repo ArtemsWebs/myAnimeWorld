@@ -25,12 +25,12 @@ const AuthGrowUpAnimation = ({
             e.preventDefault();
           }}
         >
-          <p
+          <button
             className="block text-2xl font-medium leading-3 text-red-500 pb-4 text-center cursor-pointer"
             onClick={() => authChangeHandler('signUp')}
           >
             Регистрация
-          </p>
+          </button>
           <div>
             <BaseInput
               type="text"
@@ -95,14 +95,14 @@ const AuthGrowUpAnimation = ({
             : "'transition-all ease-in-out duration-1000 -translate-y-[0px] h-[60px]"
         }`}
       >
-        <p
+        <button
           className={`absolute ${authMode === 'signIn' ? 'transition ease-in-out duration-1000 -translate-y-[120px]' : 'transition ease-in-out duration-1000 -translate-y-0]'} text-center text-2xl font-medium leading-3 text-red-500 cursor-pointer`}
           onClick={() => {
             authChangeHandler('signIn');
           }}
         >
           Авторизация
-        </p>
+        </button>
         <form
           className={`space-y-6 w-full 2 px-8 py-8 ${authMode === 'signIn' ? 'transition-all ease-in-out duration-1000 visible' : 'transition-all ease-in-out duration-500 invisible opacity-0 '}`}
           action="#"

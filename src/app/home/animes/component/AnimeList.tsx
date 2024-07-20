@@ -47,8 +47,8 @@ const AnimeList = ({ animeList, listTitle }: AnimeListProps) => {
             style={{ display: 'flex', gap: '32px' }}
             key={index}
           >
-            {animes.map((anime) => (
-              <AnimeSwiperCard anime={anime} key={anime.mal_id} />
+            {animes.map((anime, index) => (
+              <AnimeSwiperCard anime={anime} key={anime.mal_id + index} />
             ))}
           </SwiperSlide>
         ))}

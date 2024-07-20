@@ -46,7 +46,7 @@ const Profile = () => {
           </div>
           <ToggleButtons options={toggleOptions} />
         </div>
-        <div className="flex gap-6">
+        <div className="flex gap-6 justify-center">
           <SettingBlocks
             title="Настройки доступов"
             className="mt-[235px]"

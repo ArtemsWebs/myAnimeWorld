@@ -26,7 +26,6 @@ export const ShikimoriProvider = (
     },
     // 'https://shikimori.one/oauth/authorize?client_id=CLIENT_ID&redirect_uri=REDIRECT_URI&response_type=code&scope=user_rates+comments+topics',
     profile(profile) {
-      console.log('profile ', profile);
       return {
         id: profile.id,
         name: profile?.name || profile.nickname,

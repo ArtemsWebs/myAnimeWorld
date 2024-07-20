@@ -14,9 +14,7 @@ interface SettingsNavbar {
 }
 
 const SettingsNavbar = ({ items, className }: SettingsNavbar) => {
-  const [activeItems, setActiveItems] = useState<NavbarItem[]>([]);
-
-  console.log(activeItems);
+  const [activeItems, setActiveItems] = useState<NavbarItem[]>([items[0]]);
 
   return (
     <div className={clsx('flex-col gap-3 w-[250px] pr-6', className)}>

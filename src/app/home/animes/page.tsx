@@ -1,15 +1,13 @@
 'use client';
 
-import { getSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Show from '@/app/ui/Show/Show';
-import { Session } from 'next-auth';
 import AnimeList from '@/app/home/animes/component/AnimeList';
 
 import { axiosInstance } from '@/app/api/axios/axiosInstans';
 import useSWR from 'swr';
 import { AnimeRequestParams } from '@/app/home/animes/types';
+import { useUserStore } from '@/app/store/User';
 
 const animeFetcher = async ({
   page,
@@ -30,17 +28,7 @@ const animeFetcher = async ({
 };
 
 const Animes = () => {
-  const [session, setSession] = useState<Session | null>(null);
-
-  const router = useRouter();
-  useEffect(() => {
-    getSession().then((res) => {
-      if (!res) {
-        router.push('/auth');
-      }
-      setSession(res);
-    });
-  }, [getSession]);
+  const user = useUserStore((state) => state.userInfo);
 
   const [page, setPage] = useState(1);
 
@@ -50,7 +38,7 @@ const Animes = () => {
   );
 
   return (
-    <Show when={!!session}>
+    <Show when={!!user}>
       <div className="w-full min-h-[calc(50.25vw-147px)]">
         <video
           autoPlay={true}

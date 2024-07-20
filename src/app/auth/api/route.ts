@@ -25,7 +25,16 @@ export async function POST(req: NextApiRequest, res: Response) {
 
     const hashedPassword = await hash(password, 12);
     const user = await prismadb.user.create({
-      data: { email, name, hashedPassword, image: '' },
+      include: {
+        roles: true,
+      },
+      data: {
+        email,
+        name,
+        hashedPassword,
+        image: '',
+        roles: { connect: [{ id: 1 }] },
+      },
     });
 
     return Response.json(user);
