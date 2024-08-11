@@ -1,8 +1,10 @@
 import { NextRequest } from 'next/server';
+import { cookies } from 'next/headers';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(req: NextRequest, res: Response) {
+  const cookiesStore = cookies();
   if (req.method !== 'GET') {
     return new Response('Error: 405', { status: 405 });
   }

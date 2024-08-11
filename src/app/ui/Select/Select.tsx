@@ -1,5 +1,12 @@
-import Select, { GroupBase, Props } from 'react-select';
-import classNames from 'classnames';
+import Select, {
+  GroupBase,
+  Props,
+  components,
+  NoticeProps,
+} from 'react-select';
+import clsx from 'clsx';
+import React, { forwardRef } from 'react';
+import Typography from '@/app/ui/Typography';
 
 type CustomSelectProps<
   Option,
@@ -7,9 +14,27 @@ type CustomSelectProps<
   Group extends GroupBase<Option> = GroupBase<Option>,
 > = Props<Option, IsMulti, Group> & {
   className?: string;
+  label?: string;
+  ref: any;
 };
 
-function CustomSelect<
+export const NoOptionsMessage = <
+  Option,
+  IsMulti extends boolean = false,
+  Group extends GroupBase<Option> = GroupBase<Option>,
+>(
+  props: NoticeProps<Option, IsMulti, Group>,
+) => {
+  return (
+    <components.NoOptionsMessage {...props}>
+      <Typography variant={'subtitle'}>
+        {'Упс, кажется вы выбрали все доступные опции'}
+      </Typography>
+    </components.NoOptionsMessage>
+  );
+};
+
+const CustomSelect = <
   Option,
   IsMulti extends boolean = false,
   Group extends GroupBase<Option> = GroupBase<Option>,
@@ -18,18 +43,32 @@ function CustomSelect<
   onChange,
   value,
   options,
+  label,
   className,
+  ref,
   ...props
-}: CustomSelectProps<Option, IsMulti, Group>) {
+}: CustomSelectProps<Option, IsMulti, Group>) => {
   return (
-    <Select
-      {...props}
-      className={classNames(className, 'min-w-[200px]')}
-      value={value}
-      onChange={onChange}
-      options={options}
-    />
+    <div>
+      {label && (
+        <label
+          htmlFor="first_name"
+          className="block mb-2 text-sm font-medium text-gray-900 "
+        >
+          {label}
+        </label>
+      )}
+      <Select
+        ref={ref}
+        {...props}
+        options={options}
+        isMulti={isMulti}
+        className={clsx(className, 'min-w-[200px]')}
+        value={value}
+        onChange={onChange}
+      />
+    </div>
   );
-}
+};
 
 export default CustomSelect;

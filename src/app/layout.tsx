@@ -19,6 +19,7 @@ import {
 //@NOTE https://stackoverflow.com/questions/50009818/javascript-swiper-native-navigation-function-is-not-working
 import SwiperCore from 'swiper';
 import { inter } from '@/app/ui/font';
+import { ModalProvider } from '@/app/ui/Modal/ModalProvider';
 SwiperCore.use([Navigation, Pagination, EffectFade, Mousewheel, Keyboard]);
 
 export default function RootLayout({
@@ -28,7 +29,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} antialiased`}>{children}</body>
+      <body className={`${inter.className} antialiased`}>
+        <ModalProvider>{children}</ModalProvider>
+      </body>
     </html>
   );
 }

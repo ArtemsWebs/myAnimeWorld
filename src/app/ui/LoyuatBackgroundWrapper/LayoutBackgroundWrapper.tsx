@@ -1,10 +1,11 @@
 'use client';
 import { LayoutBackgroundWrapperProps } from '@/app/ui/LoyuatBackgroundWrapper/LayoutBackgroundWrapper.types';
-import { MouseEvent, MutableRefObject, useRef } from 'react';
+import { MouseEvent, MutableRefObject, useMemo, useRef } from 'react';
 import Image from 'next/image';
 import Navbar from '@/app/ui/Navbar/Navbar';
 import Show from '@/app/ui/Show/Show';
 import { UserIcon } from '@/app/home/animes/component/UserIcon';
+import { useCheckAccess } from '@/app/lib/utils/useCheckAccess';
 
 const mouseMoveEffect = (
   e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>,
@@ -30,6 +31,26 @@ const LayoutBackgroundWrapper = ({
   const isAuth = mode === 'auth';
   const bg = isAuth ? 'bg-[url(/image/yanderes.avif)]' : 'bg-["#323232"]';
 
+  const { checkPermission } = useCheckAccess();
+
+  const menuItemsWithPermission = useMemo(() => {
+    const menuItems = [{ key: 'home', value: 'Домой', route: '/home' }];
+    if (checkPermission('USER.READ_ANIME')) {
+      menuItems.push({ key: 'anime', value: 'Аниме', route: '/home' });
+    }
+    if (checkPermission('USER.READ_MANGA')) {
+      menuItems.push({ key: 'manga', value: 'Манга', route: '/home' });
+    }
+    if (checkPermission('USER.CREATE_USER')) {
+      menuItems.push({
+        key: 'dashboard',
+        value: 'Дашборд',
+        route: '/home/dashboard',
+      });
+    }
+    return menuItems;
+  }, [checkPermission]);
+
   const mainContainerRef = useRef<HTMLDivElement | null>(null);
   return (
     <div
@@ -54,7 +75,7 @@ const LayoutBackgroundWrapper = ({
             alt="Logo missing"
           />
           <Show when={!isAuth}>
-            <Navbar menuItems={menuItems} />
+            <Navbar menuItems={menuItemsWithPermission} />
           </Show>
         </div>
         {!isAuth && <UserIcon />}

@@ -19,7 +19,7 @@ const defaultVideoOptions = {
     },
   },
   userActions: {
-    hotkeys: function (event) {
+    hotkeys: function (event: any) {
       const playerContext = this as any;
       // `this` is the player in this context
       // `space` key = pause or start check video status

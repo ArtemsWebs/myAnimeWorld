@@ -1,18 +1,45 @@
 import { Elysia, t } from 'elysia';
-import { getAllDomainUsers, getDomainUser } from '../domain';
+import {
+  createUser,
+  getAllDomainUsers,
+  getDomainUser,
+  updateUser,
+} from '../domain';
+import { UserModelDTO } from '../model/user.model';
 
-export const userRouters = new Elysia()
+export const userRouters = new Elysia({ prefix: '/user' })
+  .use(UserModelDTO)
   .get(
-    '/user/me',
+    '/me',
     async ({ query, set }) => {
       const domainUser = await getDomainUser(query.email);
       return domainUser;
     },
     { query: t.Object({ email: t.String() }) },
   )
-  .onRequest(({ set }) => {
-    set.headers['Content-Type'] = 'application/json';
-  })
-  .get('/user/allUsers', async () => {
+  .get('/allUsers', async () => {
     return await getAllDomainUsers();
+  })
+  .post(
+    '/createUser',
+    async ({ body }) => {
+      console.log(body);
+      return await createUser(body);
+    },
+    {
+      body: 'user.model',
+    },
+  )
+  .put(
+    '/updateUser/:userId',
+    async ({ params: { userId }, body }) => {
+      return await updateUser(userId, body);
+    },
+    {
+      params: t.Object({ userId: t.String() }),
+      body: 'user.model',
+    },
+  )
+  .delete('/deleteUser/:userId', async ({ params: { userId } }) => {}, {
+    params: t.Object({ userId: t.String() }),
   });

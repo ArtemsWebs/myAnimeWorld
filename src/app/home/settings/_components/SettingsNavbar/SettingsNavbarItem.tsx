@@ -7,12 +7,34 @@ import classes from './SettingsNavbar.module.scss';
 interface SettingsNavbarItemProps {
   item: NavbarItem;
   activeItems: NavbarItem[];
+  titleLengthModify: number;
   onChangeActive: (item: NavbarItem) => void;
 }
+
+const getAnimationForText = (
+  titleLengthModify: number,
+  type: 'animation' | 'reverse',
+) => {
+  const textLenghtInPx = titleLengthModify * 18;
+  console.log(titleLengthModify);
+  if (textLenghtInPx <= 200) {
+    return type === 'animation'
+      ? 'setting-navbar-item-animation-200'
+      : 'setting-navbar-item-reverse-200';
+  } else if (textLenghtInPx > 200 && textLenghtInPx < 250) {
+    return type === 'animation'
+      ? 'setting-navbar-item-animation-250'
+      : 'setting-navbar-item-reverse-250';
+  } else
+    return type === 'animation'
+      ? 'setting-navbar-item-animation-250'
+      : 'setting-navbar-item-reverse-250';
+};
 
 const SettingsNavbarItem = ({
   item,
   activeItems,
+  titleLengthModify,
   onChangeActive,
 }: SettingsNavbarItemProps) => {
   const isActive = activeItems[1]?.title === item.title;
@@ -26,12 +48,13 @@ const SettingsNavbarItem = ({
       >
         <div
           className={clsx(
-            ' bg-white  flex items-center w-[30px] h-[30px] justify-center shadow-xl rounded-lg p-[4px]',
+            ' bg-white  flex items-center w-[30px] h-[30px] justify-center shadow-xl rounded-lg p-[4px] whitespace-nowrap overflow-ellipsis',
             classes['setting-navbar-item'],
-            isActive && classes['setting-navbar-item-animation'],
+            isActive &&
+              classes[getAnimationForText(titleLengthModify, 'animation')],
             !isActive &&
               item.title === activeItems[0]?.title &&
-              classes['setting-navbar-item-reverse'],
+              classes[getAnimationForText(titleLengthModify, 'reverse')],
           )}
         >
           <div>{item.icon}</div>
@@ -39,7 +62,7 @@ const SettingsNavbarItem = ({
             variant="subtitle"
             component="p"
             className={clsx(
-              'text-gray-400 absolute left-[46px]',
+              'text-gray-400 absolute left-[46px] overflow-ellipsis overflow-hidden whitespace-nowrap w-3/4',
               isActive && classes['setting-navbar-item-text-active-color'],
               !isActive &&
                 item.title === activeItems[0]?.title &&

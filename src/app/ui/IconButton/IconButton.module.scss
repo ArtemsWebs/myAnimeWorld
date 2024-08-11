@@ -1,6 +1,15 @@
 .icon-wrapper{
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    min-width: 40px;
+    min-height: 40px;
     transition-duration: 200ms;
+    border-radius: 4px;
+    :hover{
+        backdrop-filter: invert(10%);
+        transition: 0.4s;
+    }
 }
 .icon-wrapper svg{
     width: 24px;

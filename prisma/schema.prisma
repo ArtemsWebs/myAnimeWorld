@@ -23,6 +23,7 @@ model User {
   sessions       Session[] @relation(name: "SessionToUser")
   accounts       Account[] @relation(name: "AccountToUser")
   roles          Role[]    @relation(name: "UserToRoles")
+  userImage      File?
 }
 
 model Account {
@@ -138,17 +139,31 @@ model Dubbers {
   logoUrl     String
 }
 
-model Permession {
-  id      Int     @id @default(autoincrement())
-  name    String?
-  encrypt String?
-  roles   Role[]  @relation(name: "PermessionToRole")
+model Permission {
+  id          Int      @id @default(autoincrement())
+  name        String?
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+  roles       Role[]   @relation(name: "permissionToRole")
 }
 
 model Role {
-  id         Int          @id @default(autoincrement())
-  name       String?      @unique
-  encrypt    String?
-  permession Permession[] @relation(name: "PermessionToRole")
-  User       User[]       @relation(name: "UserToRoles")
+  id          Int          @id @default(autoincrement())
+  name        String?      @unique
+  description String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @default(now())
+  permission  Permission[] @relation(name: "permissionToRole")
+  User        User[]       @relation(name: "UserToRoles")
+}
+
+model File {
+  id           Int     @id @default(autoincrement())
+  bucket       String
+  fileName     String  @unique
+  originalName String
+  size         Int
+  user         User?   @relation(fields: [userId], references: [id])
+  userId       String? @unique
 }

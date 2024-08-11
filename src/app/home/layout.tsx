@@ -23,7 +23,16 @@ export default function HomeLayout({
           `${process.env.FRONTEND_BASE_URL}/home/api/me?email=${res?.user?.email}`,
           { headers: { 'Content-Type': 'application/json' } },
         ).then(async (res) => {
-          updateUserInfo(await res.json());
+          const userInfoResp = await res.json();
+          updateUserInfo({
+            ...userInfoResp.userInfo,
+            permission: userInfoResp.userInfo.roles.reduce(
+              (accum: any[], role: any) => {
+                return [...accum, ...role.permission];
+              },
+              [],
+            ),
+          });
         });
       });
     }
