@@ -149,13 +149,14 @@ model Permission {
 }
 
 model Role {
-  id          Int          @id @default(autoincrement())
-  name        String?      @unique
-  description String?
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @default(now())
-  permission  Permission[] @relation(name: "permissionToRole")
-  User        User[]       @relation(name: "UserToRoles")
+  id            Int          @id @default(autoincrement())
+  name          String?      @unique
+  description   String?
+  isDefaultUser Boolean      @default(false)
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @default(now())
+  permission    Permission[] @relation(name: "permissionToRole")
+  User          User[]       @relation(name: "UserToRoles")
 }
 
 model File {

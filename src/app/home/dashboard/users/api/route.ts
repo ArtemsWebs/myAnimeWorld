@@ -24,13 +24,17 @@ export async function GET(req: NextApiRequest, res: Response) {
 }
 
 export async function POST(req: NextRequest, res: NextApiResponse) {
-  const formData = await req.formData();
-  const createdUser = await fetch(
-    `${process.env.BACKEND_BASE_URL}/user/createUser`,
-    {
-      method: 'POST',
-      body: formData,
-    },
-  );
-  return NextResponse.json(createdUser);
+  try {
+    const formData = await req.formData();
+    const createdUser = await fetch(
+      `${process.env.BACKEND_BASE_URL}/user/createUser`,
+      {
+        method: 'POST',
+        body: formData,
+      },
+    );
+    return NextResponse.json(createdUser);
+  } catch (e) {
+    return NextResponse.json(e);
+  }
 }

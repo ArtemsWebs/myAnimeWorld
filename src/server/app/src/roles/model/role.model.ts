@@ -5,6 +5,7 @@ export const RoleModalBase = t.Object({
   createdAt: t.String(),
   updatedAt: t.String(),
   description: t.String(),
+  isDefaultUser: t.Boolean(),
   permissions: t.Array(
     t.Object({
       id: t.Numeric(),

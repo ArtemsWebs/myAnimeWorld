@@ -17,22 +17,40 @@ import { ModalContext } from '@/app/ui/Modal/ModalProvider.config';
 import { EditRoleModalBody } from '@/app/home/dashboard/roles/components/modal/EditRoleModalBody';
 import CreateButton from '@/app/ui/Buttons/CreateButton';
 import { DeleteRoleModalBody } from '@/app/home/dashboard/roles/components/modal/DeleteRoleModalBody';
-
-const getAllRolesWithPermission = async (_key: string) => {
-  return await fetch(
-    `${process.env.FRONTEND_BASE_URL}/home/dashboard/roles/api`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-      },
-    },
-  );
-};
+import Image from 'next/image';
+import { getAllRolesWithPermission } from '@/app/home/dashboard/fetchers';
 
 const columnHelper = createColumnHelper<Role>();
 
 const columns = [
+  columnHelper.accessor('isDefaultUser', {
+    header: '',
+    cell: (info) => {
+      return (
+        <>
+          {info.getValue() && (
+            <img
+              src={'https://media.tenor.com/yD41WikeBSEAAAAi/wsgrhh.gif'}
+              className={'w-[50px] h-[50px]'}
+              title={
+                'Данная роль будет использована как дефолтная при регистрации пользователя или подставляться автоматически при создание пользователя из дашборда'
+              }
+            />
+            // <Image
+            //   title={
+            //     'Данная роль будет использована как дефолтная при регистрации пользователя или подставляться автоматически при создание пользователя из дашборда'
+            //   }
+            //   src={'/icons/isDefaultRole.ico'}
+            //   width={50}
+            //   height={50}
+            //   alt={''}
+            // />
+          )}
+        </>
+      );
+    },
+  }),
+
   columnHelper.accessor('name', {
     header: () => <span>Имя</span>,
     cell: (info) => {
@@ -124,9 +142,11 @@ const Roles = () => {
               }}
             >
               <div
-                className={'w-[30px] h-[30px] flex items-center justify-center'}
+                className={
+                  'w-[30px] h-[30px] rounded-lg flex items-center justify-center'
+                }
               >
-                <TbEditCircle size={24} />
+                <TbEditCircle size={24} color={'green'} />
               </div>
             </IconButton>
             <IconButton
@@ -145,9 +165,11 @@ const Roles = () => {
               title={'Удалить роль'}
             >
               <div
-                className={'w-[30px] h-[30px] flex items-center justify-center'}
+                className={
+                  'w-[30px] h-[30px] rounded-lg flex items-center justify-center'
+                }
               >
-                <AiFillDelete size={24} />
+                <AiFillDelete size={24} className={'fill-red-400'} />
               </div>
             </IconButton>
           </div>

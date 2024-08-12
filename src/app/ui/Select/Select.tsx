@@ -15,7 +15,7 @@ type CustomSelectProps<
 > = Props<Option, IsMulti, Group> & {
   className?: string;
   label?: string;
-  ref: any;
+  ref?: any;
 };
 
 export const NoOptionsMessage = <
@@ -63,7 +63,7 @@ const CustomSelect = <
         {...props}
         options={options}
         isMulti={isMulti}
-        className={clsx(className, 'min-w-[200px]')}
+        className={clsx('min-w-[200px]', className)}
         value={value}
         onChange={onChange}
       />

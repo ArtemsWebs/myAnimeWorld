@@ -2,7 +2,6 @@ import SettingsNavbar from './_components/SettingsNavbar/SettingsNavbar';
 import { GiEgyptianProfile } from 'react-icons/gi';
 import { SiYoutubestudio } from 'react-icons/si';
 import { BsFillFileFontFill } from 'react-icons/bs';
-import { Divider } from '@/app/ui';
 import { ReactNode } from 'react';
 
 const navbarItems = [
@@ -30,7 +29,7 @@ export default function SettingsLayout({
 }>) {
   return (
     <div className="my-[24px] mx-[24px] flex ">
-      <SettingsNavbar items={navbarItems} />
+      <SettingsNavbar items={navbarItems} />e
       {/* <Divider orientation="vertical" /> */}
       <div style={{ width: 'calc(100% - 250px)' }}>{children}</div>
     </div>

@@ -6,10 +6,14 @@ import { Permission, Role } from '@/app/store/User.types';
 import { intersectionBy } from 'lodash';
 import useSWR from 'swr';
 import { Controller, useForm } from 'react-hook-form';
-import { EditRoleModalSchema } from '@/app/home/dashboard/roles/components/schema/EditRoleModal.schema';
+import {
+  EditRoleModalSchema,
+  EditRoleModalSchemaType,
+} from '@/app/home/dashboard/roles/components/schema/EditRoleModal.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import React from 'react';
 import { FooterButtonsBlock } from '@/app/ui/Modal/components/FooterButtonsBlock';
+import Checkbox from '@/app/ui/Checkbox/Checkbox';
 
 interface EditRoleModalBodyProps {
   roleItem?: Role;
@@ -84,13 +88,15 @@ export const EditRoleModalBody = ({
 
   const {
     control,
+    watch,
     handleSubmit,
-    formState: { isSubmitting },
-  } = useForm({
+    formState: { isSubmitting, isValid, errors },
+  } = useForm<EditRoleModalSchemaType>({
     resolver: zodResolver(EditRoleModalSchema),
     defaultValues: {
       name: roleItem?.name ?? '',
       description: roleItem?.description ?? '',
+      isDefaultUser: roleItem?.isDefaultUser ?? false,
       permissions: intersectionBy(
         roleItem?.permission,
         permissions.allPermissions,
@@ -105,6 +111,7 @@ export const EditRoleModalBody = ({
       description: rolesData.description,
       createdAt: roleItem?.createdAt ?? new Date(Date.now()),
       updatedAt: new Date(Date.now()),
+      isDefaultUser: rolesData.isDefaultUser,
       permissions: rolesData.permissions,
     };
     if (roleItem?.id) {
@@ -180,13 +187,28 @@ export const EditRoleModalBody = ({
           );
         }}
       />
+      <Controller
+        control={control}
+        name="isDefaultUser"
+        render={({ field }) => {
+          return (
+            <Checkbox
+              {...field}
+              value={''}
+              checked={field.value}
+              onChange={(value: boolean) => field.onChange(value)}
+              label={'Выбрать эту роль, как дефолтную роль, для пользователя'}
+            />
+          );
+        }}
+      />
 
       <FooterButtonsBlock
         declineTitle={'Отмена'}
         acceptType={'submit'}
         onDeclineHandler={() => close?.()}
         acceptTitle={roleItem ? 'Редактировать' : 'Создать'}
-        acceptDisabled={isSubmitting}
+        acceptDisabled={!isValid || isSubmitting}
       />
     </form>
   );

@@ -1,22 +1,30 @@
 import React, {
   FormEvent,
   ForwardRefRenderFunction,
-  HTMLAttributes,
+  InputHTMLAttributes,
 } from 'react';
 import Typography from '@/app/ui/Typography';
 
-interface BaseModalInputProps extends HTMLAttributes<HTMLInputElement> {
+interface BaseModalInputProps
+  extends React.DetailedHTMLProps<
+    InputHTMLAttributes<HTMLInputElement>,
+    HTMLInputElement
+  > {
   label: string;
   onChange: (e: FormEvent<HTMLInputElement>) => void;
+  className?: string;
   errorText?: string;
 }
 
 const BaseModalInput: ForwardRefRenderFunction<
   HTMLInputElement,
   BaseModalInputProps
-> = ({ label, onChange, errorText, ...props }, ref) => {
+> = (
+  { label, onChange, errorText, className, type = 'text', ...props },
+  ref,
+) => {
   return (
-    <div>
+    <div className={className}>
       <label
         htmlFor="first_name"
         className="block mb-2 text-sm font-medium text-gray-900 "
@@ -27,7 +35,7 @@ const BaseModalInput: ForwardRefRenderFunction<
         ref={ref}
         {...props}
         onChange={onChange}
-        type="text"
+        type={type}
         id="first_name"
         className="bg-gray-50 block w-full p-2.5 border  border-gray-300  text-sm rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500  focus-visible:border-blue-500 focus-visible:ring-blue-500"
         placeholder="John"

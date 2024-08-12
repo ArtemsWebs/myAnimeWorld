@@ -1,6 +1,6 @@
 import { HTMLAttributes, ReactNode } from 'react';
 import classes from './IconButton.module.scss';
-import classNames from 'classnames';
+import clsx from 'clsx';
 
 interface IconButtonProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
@@ -17,7 +17,7 @@ const IconButton = ({
   return (
     <div
       {...props}
-      className={classNames(classes['icon-wrapper'], className)}
+      className={clsx(classes['icon-wrapper'], className)}
       onClick={onClick}
     >
       {children}

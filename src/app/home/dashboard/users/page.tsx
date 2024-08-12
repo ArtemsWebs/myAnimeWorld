@@ -42,7 +42,7 @@ const columns = [
     header: () => <span>Имя</span>,
     cell: (info) => {
       return (
-        <div className={'flex gap-3'}>
+        <div className={'flex gap-3 items-center'}>
           {info.row.original.image ? (
             <img
               src={info.row.original.image}
@@ -57,7 +57,7 @@ const columns = [
               height={40}
             />
           )}
-          <div>{info.getValue()}</div>
+          <span>{info.getValue()}</span>
         </div>
       );
     },
@@ -132,7 +132,6 @@ const Users = () => {
               (res) => res,
             );
             const blob = await response.blob();
-            console.log(blob);
             return { ...user, image: URL.createObjectURL(blob) };
           }
           return { ...user };

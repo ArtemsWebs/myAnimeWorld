@@ -26,12 +26,12 @@ export const FooterButtonsBlock = ({
         type={acceptType}
         style={{ width: '25%' }}
         onClick={() => onDeclineHandler?.()}
-        disabled={acceptDisabled}
       >
         {declineTitle}
       </SuccesButton>
       <SuccesButton
         style={{ width: '25%' }}
+        disabled={acceptDisabled}
         onClick={() => onAcceptHandler?.()}
       >
         {acceptTitle}

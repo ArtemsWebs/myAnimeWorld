@@ -16,7 +16,6 @@ const getAnimationForText = (
   type: 'animation' | 'reverse',
 ) => {
   const textLenghtInPx = titleLengthModify * 18;
-  console.log(titleLengthModify);
   if (textLenghtInPx <= 200) {
     return type === 'animation'
       ? 'setting-navbar-item-animation-200'

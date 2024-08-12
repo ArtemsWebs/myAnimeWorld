@@ -17,4 +17,7 @@ export const EditRoleModalSchema = z.object({
     .nonempty({
       message: 'К роли должна быть привязано хотя бы одно полномочие',
     }),
+  isDefaultUser: z.boolean(),
 });
+
+export type EditRoleModalSchemaType = z.infer<typeof EditRoleModalSchema>;

@@ -23,7 +23,6 @@ export const userRouters = new Elysia({ prefix: '/user' })
   .post(
     '/createUser',
     async ({ body }) => {
-      console.log(body);
       return await createUser(body);
     },
     {

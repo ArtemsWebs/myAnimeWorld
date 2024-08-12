@@ -9,6 +9,7 @@ export type Role = {
   id: number;
   description: string;
   name: string;
+  isDefaultUser: boolean;
   permission: Permission[];
   updatedAt: Date;
   createdAt: Date;

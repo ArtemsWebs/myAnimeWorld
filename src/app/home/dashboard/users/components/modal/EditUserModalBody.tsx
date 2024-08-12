@@ -1,11 +1,17 @@
 import { User } from 'next-auth';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { EditUserModalSchema } from '@/app/home/dashboard/users/components/schema/EditUserModal.schema';
+import {
+  EditUserModalSchema,
+  EditUserModalType,
+} from '@/app/home/dashboard/users/components/schema/EditUserModal.schema';
 import BaseModalInput from '@/app/ui/BaseModalInput/BaseModalInput';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { FooterButtonsBlock } from '@/app/ui/Modal/components/FooterButtonsBlock';
 import FileUploader from '@/app/ui/FileUploader';
+import { Select } from '@/app/ui';
+import useSWR from 'swr';
+import { getAllRolesWithPermission } from '@/app/home/dashboard/fetchers';
 
 type UserWithoutId = Omit<User, 'id'>;
 
@@ -38,16 +44,37 @@ export const EditUserModalBody = ({
 }: EditUserModalBodyProps) => {
   const {
     control,
+    watch,
     handleSubmit,
-    formState: { isSubmitting, isValid },
-  } = useForm({
+    setValue,
+    formState: { isSubmitting, isValid, errors },
+  } = useForm<EditUserModalType>({
     resolver: zodResolver(EditUserModalSchema),
-    defaultValues: { ...userItem },
+    defaultValues: { ...userItem, password: '', confirm: '', roles: [] },
   });
 
   const [fileData, setFileData] = useState<FileList | null>(null);
 
-  console.log(fileData);
+  const { data: allRolesWithPermission, mutate: mutateRolePermissions } =
+    useSWR(
+      'userModal_getAllRolesWithPermission ',
+      async (_key) => {
+        const allData = await getAllRolesWithPermission(_key).then(
+          async (res) => await res.json(),
+        );
+        return allData;
+      },
+      { fallbackData: () => [] },
+    );
+
+  useEffect(() => {
+    if (allRolesWithPermission.allUsers && watch('roles')?.length === 0) {
+      setValue(
+        'roles',
+        allRolesWithPermission.allUsers.filter((role) => role.isDefaultUser),
+      );
+    }
+  }, [allRolesWithPermission, watch]);
 
   const onSubmit = useCallback(
     async (data: Omit<User, 'id'>) => {
@@ -98,7 +125,7 @@ export const EditUserModalBody = ({
                 <BaseModalInput
                   {...field}
                   errorText={fieldState.error?.message}
-                  label="email"
+                  label="Email"
                   onChange={(e) => {
                     field.onChange(e.currentTarget.value);
                   }}
@@ -108,6 +135,64 @@ export const EditUserModalBody = ({
           />
         </div>
       </div>
+      <div className={'flex gap-4 mt-4'}>
+        <Controller
+          control={control}
+          name="password"
+          render={({ field, fieldState, formState }) => {
+            return (
+              <BaseModalInput
+                {...field}
+                className={'w-1/2'}
+                type={'password'}
+                errorText={fieldState.error?.message}
+                label="Пароль"
+                onChange={(e) => {
+                  field.onChange(e.currentTarget.value);
+                }}
+              />
+            );
+          }}
+        />
+        <Controller
+          control={control}
+          name="confirm"
+          render={({ field, fieldState, formState }) => {
+            return (
+              <BaseModalInput
+                {...field}
+                className={'w-1/2'}
+                type="password"
+                errorText={fieldState.error?.message}
+                label="Подтвердите пароль"
+                onChange={(e) => {
+                  field.onChange(e.currentTarget.value);
+                }}
+              />
+            );
+          }}
+        />
+      </div>
+      <Controller
+        control={control}
+        name="roles"
+        render={({ field, fieldState, formState }) => {
+          return (
+            <Select
+              {...field}
+              label="Роли"
+              className={'mt-4'}
+              isMulti={true}
+              options={allRolesWithPermission.allUsers}
+              getOptionLabel={(val) => val.description}
+              getOptionValue={(val) => val.name}
+              onChange={(newValue, actionMeta) => {
+                field.onChange(newValue);
+              }}
+            />
+          );
+        }}
+      />
       <FooterButtonsBlock
         declineTitle={'Отмена'}
         acceptType={'submit'}

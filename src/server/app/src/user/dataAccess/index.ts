@@ -25,27 +25,30 @@ export const createUserDB = async (
   body: UserTypescriptAnnotation,
   uniqueFileName: string,
 ) => {
-  const createdUser = await prismaDb.user.create({
-    data: {
-      roles: { connect: { id: 3 } },
-      name: body.name,
-      email: body.email,
-      hashedPassword: 'ewfefwefwf',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    },
-  });
-  const createdFile = await prismaDb.file.create({
-    data: {
-      bucket: 'images',
-      fileName: uniqueFileName,
-      originalName: body.image.name,
-      size: body.image.size,
-      userId: createdUser.id,
-    },
-  });
-
-  return createdFile;
+  try {
+    const createdUser = await prismaDb.user.create({
+      data: {
+        roles: { connect: { id: 3 } },
+        name: body.name,
+        email: body.email,
+        hashedPassword: 'ewfefwefwf',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+    });
+    await prismaDb.file.create({
+      data: {
+        bucket: 'images',
+        fileName: uniqueFileName,
+        originalName: body.image.name,
+        size: body.image.size,
+        userId: createdUser.id,
+      },
+    });
+    return createdUser;
+  } catch (e) {
+    return e;
+  }
 };
 
 export const updateUserDB = async (

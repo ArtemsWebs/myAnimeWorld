@@ -37,8 +37,6 @@ const Animes = () => {
     animeFetcher,
   );
 
-  console.log(user);
-
   return (
     <Show when={!!user}>
       <div className="w-full min-h-[calc(50.25vw-147px)]">

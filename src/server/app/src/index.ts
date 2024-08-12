@@ -7,10 +7,12 @@ import { permissionRouters } from './permession/entry';
 import { ServerError } from '../lib/serverError';
 import { minioInit } from './minio/index.';
 import { minioRouters } from './minio/entry';
+import swagger from '@elysiajs/swagger';
 
 minioInit();
 
 const app = new Elysia()
+  .use(swagger())
   .error({
     ServerError,
   })

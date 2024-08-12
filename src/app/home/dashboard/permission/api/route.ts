@@ -44,9 +44,6 @@ export async function PUT(req: NextRequest, res: Response) {
   const permissionId = req.nextUrl.searchParams.get('permissionId');
   const body = await req.json();
 
-  console.log(body);
-  console.log(permissionId);
-
   const updatedPermission = await fetch(
     `${process.env.BACKEND_BASE_URL}/permission/changePermission/${permissionId}`,
     {

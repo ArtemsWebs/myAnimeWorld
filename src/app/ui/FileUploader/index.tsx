@@ -20,21 +20,22 @@ const FileUploader = ({
   isMulti,
 }: FileUploaderProps) => {
   const showImagePreview = !isMulti && !!files?.[0];
-  console.log(showImagePreview);
   return (
     <>
       <input
         id="file-input"
         type="file"
         multiple={isMulti}
-        className={clsx(classes['file-uploader'], classNames)}
+        className={classes['file-uploader']}
         onChange={onChange}
       />
       <Show when={!files?.[0]}>
         <label
-          className={
-            'flex flex-col gap-4 min-w-[256px] h-[256px] border-2 border-cyan-300 border-dashed rounded-lg red text-center justify-center items-center cursor-pointer hover:border-cyan-500'
-          }
+          className={clsx(
+            'flex flex-col gap-4 min-w-[256px] min-h-[256px] border-2 border-cyan-300 border-dashed rounded-lg red text-center justify-center items-center cursor-pointer',
+            classNames,
+            'hover:border-cyan-500',
+          )}
           htmlFor="file-input"
         >
           <MdOutlineCloudUpload size={40} />
@@ -42,10 +43,10 @@ const FileUploader = ({
         </label>
       </Show>
       <Show when={showImagePreview}>
-        <div className={'w-1/2 h-[256px] flex justify-center'}>
+        <div className={'w-1/2 flex justify-center'}>
           <img
             src={files?.[0] ? URL.createObjectURL(files?.[0]) : ''}
-            className={'rounded-lg h-full'}
+            className={'rounded-lg h-full object-cover'}
           />
         </div>
       </Show>

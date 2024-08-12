@@ -33,6 +33,7 @@ export const changeRolePermissionDB = async (
       updatedAt: body.updatedAt,
       createdAt: body.createdAt,
       name: body.name,
+      isDefaultUser: body.isDefaultUser,
       description: body.description,
     },
   });
@@ -49,6 +50,7 @@ export const createNewRoleDB = async (body: RoleTypescriptAnnotation) => {
       createdAt: body.createdAt,
       updatedAt: body.updatedAt,
       name: body.name,
+      isDefaultUser: body.isDefaultUser,
       description: body.description,
     },
   });
