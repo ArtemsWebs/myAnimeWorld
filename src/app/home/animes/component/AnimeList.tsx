@@ -23,6 +23,7 @@ const AnimeList = ({ animeList, listTitle }: AnimeListProps) => {
     () => splitDataForSlides(8, animeList),
     [animeList],
   );
+  new Set();
 
   return (
     <div className={'w-full min-h-5'}>

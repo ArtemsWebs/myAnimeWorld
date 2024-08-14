@@ -6,10 +6,10 @@ import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import { AuthSwitcherProps, User } from '@/app/auth/components/Auth.types';
 import AuthGrowUpAnimation from '@/app/auth/components/AuthGrowUpAnimation';
-import { axiosInstance } from '@/app/api/axios/axiosInstans';
+import axios from 'axios';
 
 const registerUser = async (user: User) => {
-  return await axiosInstance.post('/auth/api', user);
+  return await axios.post('/auth/api', user);
 };
 
 const authUser = async (email: string, password: string, router: any) => {

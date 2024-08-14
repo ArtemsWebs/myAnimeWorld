@@ -4,8 +4,9 @@ datasource db {
 }
 
 generator client {
-  provider      = "prisma-client-js"
-  binaryTargets = ["native", "rhel-openssl-1.0.x"]
+  provider        = "prisma-client-js"
+  binaryTargets   = ["native", "rhel-openssl-1.0.x"]
+  previewFeatures = ["omitApi"]
 }
 
 //  This is your Prisma schema file,
@@ -14,7 +15,7 @@ generator client {
 model User {
   id             String    @id @default(cuid())
   email          String    @unique
-  name           String?
+  name           String
   image          String?
   hashedPassword String?
   emailVerified  DateTime? @map("email_verified")
@@ -141,7 +142,7 @@ model Dubbers {
 
 model Permission {
   id          Int      @id @default(autoincrement())
-  name        String?
+  name        String
   description String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now())
@@ -150,7 +151,7 @@ model Permission {
 
 model Role {
   id            Int          @id @default(autoincrement())
-  name          String?      @unique
+  name          String       @unique
   description   String?
   isDefaultUser Boolean      @default(false)
   createdAt     DateTime     @default(now())

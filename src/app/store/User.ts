@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { permission, Role } from '@/app/store/User.types';
+import { Permission, Role } from '@/app/store/User.types';
 
 interface UserInfo {
   name: string;
@@ -7,7 +7,7 @@ interface UserInfo {
   createdAt: string;
   id: string;
   roles: Role[];
-  permission: permission[];
+  permission: Permission[];
 }
 
 interface UserState {

@@ -13,18 +13,8 @@ import CreateButton from '@/app/ui/Buttons/CreateButton';
 import { useContext } from 'react';
 import { ModalContext } from '@/app/ui/Modal/ModalProvider.config';
 import { EditUserModalBody } from '@/app/home/dashboard/users/components/modal/EditUserModalBody';
-
-const getAllUser = async (_key: string) => {
-  return await fetch(
-    `${process.env.FRONTEND_BASE_URL}/home/dashboard/users/api`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-      },
-    },
-  );
-};
+import { getAllUser } from '@/app/home/dashboard/users/fetchers/userFetchers';
+import { uploadFile, uploadImageFile } from '@/app/home/fetcher/homeFetcher';
 
 type Person = {
   email: string;
@@ -113,31 +103,23 @@ const Users = () => {
   const { data: allUsersWithRoles, mutate: mutateAllUsersWithRoles } = useSWR(
     '_getAllUsers',
     async (_key) => {
-      const allUsers = await getAllUser(_key).then(
-        async (res) => await res.json(),
-      );
-
-      const usersWithImage = await Promise.all(
-        allUsers.map(async (user: any) => {
-          if (user.userImage) {
-            const url = new URL(
-              `${process.env.FRONTEND_BASE_URL}/home/api/file/`,
-            );
-            url.searchParams.append(
-              'fileName',
-              String(user.userImage.originalName),
-            );
-
-            const response = await fetch(url, { method: 'GET' }).then(
-              (res) => res,
-            );
-            const blob = await response.blob();
-            return { ...user, image: URL.createObjectURL(blob) };
-          }
-          return { ...user };
-        }),
-      );
-      return usersWithImage;
+      const { data: allUsers } = await getAllUser(_key);
+      if (allUsers) {
+        const usersWithImage = await Promise.all(
+          allUsers.map(async (user) => {
+            if (user.userImage) {
+              const { data: response } = await uploadImageFile(
+                user.userImage.originalName,
+              );
+              const blob = await response.blob();
+              return { ...user, image: URL.createObjectURL(blob) };
+            }
+            return { ...user };
+          }),
+        );
+        return usersWithImage;
+      }
+      return [];
     },
     { fallbackData: () => [] },
   );

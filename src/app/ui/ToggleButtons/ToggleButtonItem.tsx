@@ -15,7 +15,7 @@ const ToggleButtonItem = ({
   return (
     <div
       className={clsx(
-        'flex p-4 gap-3 justify-center items-center rounded-md cursor-pointer',
+        'flex p-4 gap-3 justify-center items-center rounded-md cursor-pointer ',
         active && 'bg-white drop-shadow-lg',
       )}
       onClick={onClick}

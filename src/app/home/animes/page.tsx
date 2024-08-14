@@ -3,8 +3,7 @@
 import { useState } from 'react';
 import Show from '@/app/ui/Show/Show';
 import AnimeList from '@/app/home/animes/component/AnimeList';
-
-import { axiosInstance } from '@/app/api/axios/axiosInstans';
+import axios from 'axios';
 import useSWR from 'swr';
 import { AnimeRequestParams } from '@/app/home/animes/types';
 import { useUserStore } from '@/app/store/User';
@@ -15,7 +14,7 @@ const animeFetcher = async ({
   status,
   order_by,
 }: AnimeRequestParams) => {
-  return await axiosInstance
+  return await axios
     .get('https://api.jikan.moe/v4/anime', {
       params: {
         page: page ?? 1,
@@ -31,6 +30,8 @@ const Animes = () => {
   const user = useUserStore((state) => state.userInfo);
 
   const [page, setPage] = useState(1);
+
+  setPage(page + 1);
 
   const { data: animes } = useSWR(
     { page, limit: 24, status: 'airing', order_by: 'popularity' },
