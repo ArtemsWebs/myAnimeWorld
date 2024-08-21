@@ -17,8 +17,7 @@ import { ModalContext } from '@/app/ui/Modal/ModalProvider.config';
 import { EditRoleModalBody } from '@/app/home/dashboard/roles/components/modal/EditRoleModalBody';
 import CreateButton from '@/app/ui/Buttons/CreateButton';
 import { DeleteRoleModalBody } from '@/app/home/dashboard/roles/components/modal/DeleteRoleModalBody';
-import Image from 'next/image';
-import { getAllRolesWithPermission } from '@/app/home/dashboard/fetchers';
+import { getAllRoles } from '@/app/home/dashboard/roles/fetchers/roleFetchers';
 
 const columnHelper = createColumnHelper<Role>();
 
@@ -108,16 +107,10 @@ const columns = [
 const Roles = () => {
   const modalContext = useContext(ModalContext);
   const { data: allRolesWithPermission, mutate: mutateRolePermissions } =
-    useSWR(
-      '_getAllRolesWithPermission ',
-      async (_key) => {
-        const allData = await getAllRolesWithPermission(_key).then(
-          async (res) => await res.json(),
-        );
-        return allData;
-      },
-      { fallbackData: () => [] },
-    );
+    useSWR('_getAllRolesWithPermission ', async (_key) => {
+      const { data: roles } = await getAllRoles();
+      return roles;
+    });
 
   const dynamicColumn = useMemo(
     () =>
@@ -135,7 +128,7 @@ const Roles = () => {
                       roleItem={info.row.original}
                       close={close}
                       mutateRolePermissions={() => mutateRolePermissions()}
-                      allPermissions={allRolesWithPermission.allPermissions}
+                      allPermissions={allRolesWithPermission ?? []}
                     />
                   ),
                 });
@@ -175,11 +168,7 @@ const Roles = () => {
           </div>
         ),
       }),
-    [
-      allRolesWithPermission.allPermissions,
-      modalContext,
-      mutateRolePermissions,
-    ],
+    [allRolesWithPermission, modalContext, mutateRolePermissions],
   );
 
   const actualColumns = useMemo(
@@ -199,7 +188,7 @@ const Roles = () => {
                 <EditRoleModalBody
                   close={close}
                   mutateRolePermissions={() => mutateRolePermissions()}
-                  allPermissions={allRolesWithPermission.allPermissions}
+                  allPermissions={allRolesWithPermission ?? []}
                 />
               ),
             });
@@ -209,8 +198,11 @@ const Roles = () => {
         </CreateButton>
       </div>
       <Table
+        getRowClassName={(row: any) =>
+          row.original.isDefaultUser && '!bg-green-200'
+        }
         columns={actualColumns}
-        data={allRolesWithPermission.allUsers ?? []}
+        data={allRolesWithPermission ?? []}
       />
     </>
   );

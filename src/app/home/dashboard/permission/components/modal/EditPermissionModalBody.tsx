@@ -2,81 +2,29 @@
 
 import BaseModalInput from '@/app/ui/BaseModalInput/BaseModalInput';
 import { Permission } from '@/app/store/User.types';
-import useSWR from 'swr';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import React from 'react';
 import { FooterButtonsBlock } from '@/app/ui/Modal/components/FooterButtonsBlock';
-import { EditPermissionModalSchema } from '@/app/home/dashboard/permission/components/schema/EditPermissionModal.schema';
+import {
+  EditPermissionModalSchema,
+  PermissionModalFormData,
+} from '@/app/home/dashboard/permission/components/schema/EditPermissionModal.schema';
+import {
+  createPermission,
+  updatePermission,
+} from '@/app/home/dashboard/permission/fetchers/permissionFetchers';
 
-interface EditRoleModalBodyProps {
+interface EditPermissionModalBodyProps {
   permissionItem?: Permission;
   mutatePermissions: () => void;
   close?: () => void;
 }
 
-const fetchAllPermissions = async () => {
-  return await fetch(
-    `${process.env.FRONTEND_BASE_URL}/home/dashboard/permission/api`,
-    { method: 'GET' },
-  );
-};
-const updatePermissionModal = async (
-  roleId: number,
-  body: {
-    name: string;
-    description: string;
-    updatedAt: Date;
-    createdAt: Date;
-  },
-) => {
-  const url = new URL(
-    `${process.env.FRONTEND_BASE_URL}/home/dashboard/permission/api`,
-  );
-
-  url.searchParams.append('permissionId', String(roleId));
-
-  return await fetch(url, {
-    method: 'PUT',
-    headers: {
-      'Content-type': 'application/json; charset=UTF-8', // Indicates the content
-    },
-    body: JSON.stringify(body),
-  });
-};
-const createPermissionModal = async (body: {
-  name: string;
-  description: string;
-  updatedAt: Date;
-  createdAt: Date;
-}) => {
-  return await fetch(
-    `${process.env.FRONTEND_BASE_URL}/home/dashboard/permission/api`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8', // Indicates the content
-      },
-      body: JSON.stringify(body),
-    },
-  );
-};
-
 export const EditPermissionModalBody = ({
   permissionItem,
   close,
   mutatePermissions,
-}: EditRoleModalBodyProps) => {
-  const { data: permissions, isLoading } = useSWR(
-    'editRoleModal_getAllPermission',
-    async () => await fetchAllPermissions().then((res) => res.json()),
-    {
-      fallbackData: () => ({
-        allPermissions: [],
-      }),
-    },
-  );
-
+}: EditPermissionModalBodyProps) => {
   const {
     control,
     handleSubmit,
@@ -89,18 +37,17 @@ export const EditPermissionModalBody = ({
     },
   });
 
-  const onSubmit = async (rolesData: any) => {
+  const onSubmit = async (permissionData: PermissionModalFormData) => {
     const permissionRequestBody = {
-      name: rolesData.name,
-      description: rolesData.description,
+      name: permissionData.name,
+      description: permissionData.description,
       createdAt: permissionItem?.createdAt ?? new Date(Date.now()),
       updatedAt: new Date(Date.now()),
-      permissions: rolesData.permissions,
     };
     if (permissionItem?.id) {
-      await updatePermissionModal(permissionItem.id, permissionRequestBody);
+      await updatePermission(permissionRequestBody, permissionItem.id);
     } else {
-      await createPermissionModal(permissionRequestBody);
+      await createPermission(permissionRequestBody);
     }
     mutatePermissions();
     close?.();

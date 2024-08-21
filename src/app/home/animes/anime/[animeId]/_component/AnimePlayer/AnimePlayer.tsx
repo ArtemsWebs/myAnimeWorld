@@ -1,11 +1,12 @@
 import { HTMLAttributes, useMemo, useState } from 'react';
 import classNames from 'classnames';
 import VideoJS from '@/app/ui/Player/Player';
-import { AnimeFull, BaseOption } from '@/app/home/types';
 import CustomSelect from '@/app/ui/Select/Select';
+import { AnimeModelResponse } from '@/server/src/anime/model/anime.model';
+import { BaseOption } from '@/app/home/animes/types';
 
 interface AnimePlayer extends HTMLAttributes<HTMLDivElement> {
-  animeFullInfo: AnimeFull['currentAnime'];
+  animeFullInfo: AnimeModelResponse;
   playerClassname?: string;
   options?: any;
   onReady?: any;

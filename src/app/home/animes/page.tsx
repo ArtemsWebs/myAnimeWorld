@@ -7,6 +7,7 @@ import axios from 'axios';
 import useSWR from 'swr';
 import { AnimeRequestParams } from '@/app/home/animes/types';
 import { useUserStore } from '@/app/store/User';
+import { getAnimes } from '@/app/home/animes/fetchers/animeFetchers';
 
 const animeFetcher = async ({
   page,
@@ -31,12 +32,7 @@ const Animes = () => {
 
   const [page, setPage] = useState(1);
 
-  setPage(page + 1);
-
-  const { data: animes } = useSWR(
-    { page, limit: 24, status: 'airing', order_by: 'popularity' },
-    animeFetcher,
-  );
+  const { data: animes } = useSWR({ offset: page, limit: 24 }, getAnimes);
 
   return (
     <Show when={!!user}>

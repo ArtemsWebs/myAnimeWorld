@@ -4,20 +4,17 @@ import {
   deleteRoleDB,
   getAllRoles,
 } from '../dataAccess';
-import { RoleTypescriptAnnotation } from '../model/role.model';
+import { RoleBody } from '../model/role.model';
 
 export const getAllDomainRoles = async () => {
   return await getAllRoles();
 };
 
-export const changeRolePermission = async (
-  roleId: number,
-  body: RoleTypescriptAnnotation,
-) => {
+export const changeRolePermission = async (roleId: number, body: RoleBody) => {
   return await changeRolePermissionDB(roleId, body);
 };
 
-export const createNewRole = async (body: RoleTypescriptAnnotation) => {
+export const createNewRole = async (body: RoleBody) => {
   return await createNewRoleDB(body);
 };
 

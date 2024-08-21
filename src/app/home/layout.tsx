@@ -36,21 +36,6 @@ export default function HomeLayout({
             });
           }
         });
-        fetch(
-          `${process.env.FRONTEND_BASE_URL}/home/api/me?email=${res?.user?.email}`,
-          { headers: { 'Content-Type': 'application/json' } },
-        ).then(async (res) => {
-          const userInfoResp = await res.json();
-          updateUserInfo({
-            ...userInfoResp.userInfo,
-            permission: userInfoResp.userInfo.roles.reduce(
-              (accum: any[], role: any) => {
-                return [...accum, ...role.permission];
-              },
-              [],
-            ),
-          });
-        });
       });
     }
   }, [userInfo]);

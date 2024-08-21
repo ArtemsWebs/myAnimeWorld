@@ -1,6 +1,26 @@
 import prismaDb from '../../../../../lib/prismaDb';
 import { AnimeT } from './types';
 
+export const getAnimesDB = async (offset: number, limit: number) => {
+  const animes = await prismaDb.animes.findMany({
+    take: limit,
+    skip: limit * offset,
+    orderBy: {
+      airing: 'asc',
+    },
+  });
+  return animes;
+};
+
+export const createAnimes = async (animesData: AnimeT[]) => {
+  const createdAnimes = Promise.all(
+    animesData.map(async (animesData) => {
+      return await createNewAnime(animesData);
+    }),
+  );
+  return createdAnimes;
+};
+
 export const getAnimeById = async (animeId: number) => {
   const anime = await prismaDb.animes.findUnique({
     include: {
@@ -26,7 +46,7 @@ export const createNewAnime = async (animeData: AnimeT) => {
       id: animeData.mal_id,
       malId: animeData.mal_id,
       url: animeData.url,
-      title: animeData.title,
+      title: animeData.title ?? '',
       titleEnglish: animeData.title_english,
       titleJapanese: animeData.title_japanese,
       episodes: animeData.episodes,

@@ -7,8 +7,12 @@ export const minioRouters = new Elysia({ prefix: '/minio' })
   })
   .get(
     '/uploadImageFile/:fileName',
-    async ({ params: { fileName } }) => {
-      return await getFileForFront(fileName);
+    async ({ params: { fileName }, set }) => {
+      set.headers['content-type'] = 'image/jpg';
+      const iternaRebdableImage = await getFileForFront(fileName);
+
+      return iternaRebdableImage;
     },
-    { params: t.Object({ fileName: t.String() }), response: t.File() },
+
+    { params: t.Object({ fileName: t.String() }) },
   );

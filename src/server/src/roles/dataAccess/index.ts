@@ -1,10 +1,10 @@
 import prismaDb from '../../../../../lib/prismaDb';
-import { RoleTypescriptAnnotation } from '../model/role.model';
+import { RoleBody } from '../model/role.model';
 
 export const getAllRoles = async () => {
   const rolesWithpermission = await prismaDb.role.findMany({
     include: {
-      permission: true,
+      permission: { select: { name: true, description: true, id: true } },
     },
   });
   return rolesWithpermission;
@@ -12,7 +12,7 @@ export const getAllRoles = async () => {
 
 export const changeRolePermissionDB = async (
   roleId: number,
-  body: RoleTypescriptAnnotation,
+  body: RoleBody,
 ) => {
   await prismaDb.role.update({
     where: { id: roleId },
@@ -29,7 +29,7 @@ export const changeRolePermissionDB = async (
       permission: true,
     },
     data: {
-      permission: { connect: body.permissions.map((per) => ({ id: per.id })) },
+      permission: { connect: body.permission.map((per) => ({ id: per.id })) },
       updatedAt: body.updatedAt,
       createdAt: body.createdAt,
       name: body.name,
@@ -40,13 +40,13 @@ export const changeRolePermissionDB = async (
   return updatedRolePermissions;
 };
 
-export const createNewRoleDB = async (body: RoleTypescriptAnnotation) => {
+export const createNewRoleDB = async (body: RoleBody) => {
   const createdRole = await prismaDb.role.create({
     include: {
       permission: true, // Include all posts in the returned object
     },
     data: {
-      permission: { connect: body.permissions.map((per) => ({ id: per.id })) },
+      permission: { connect: body.permission.map((per) => ({ id: per.id })) },
       createdAt: body.createdAt,
       updatedAt: body.updatedAt,
       name: body.name,

@@ -13,6 +13,7 @@ export const EditRoleModalSchema = z.object({
   }),
   permissions: z
     .object({ name: z.string(), description: z.string(), id: z.number() })
+    .required()
     .array()
     .nonempty({
       message: 'К роли должна быть привязано хотя бы одно полномочие',

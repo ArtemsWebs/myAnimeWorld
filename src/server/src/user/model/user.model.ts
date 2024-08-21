@@ -1,21 +1,20 @@
 import { Elysia, t } from 'elysia';
-import { RoleModalBase } from '../../roles/model/role.model';
+import { RoleModelBase } from '../../roles/model/role.model';
 
 export const UserModelBase = t.Object({
   name: t.String(),
   email: t.String(),
   image: t.String(),
   createdAt: t.Date(),
-  roles: t.Array(RoleModalBase),
+  roles: t.Array(RoleModelBase),
 });
 
-//roles: { select: { permission: true, name: true, description: true } },
-
-export const UserModelRespones = t.Object({
+export const UserModelResponse = t.Object({
   name: t.String(),
   email: t.String(),
   image: t.Nullable(t.String()),
   createdAt: t.Date(),
+  updatedAt: t.Date(),
   userImage: t.Nullable(
     t.Object({
       id: t.Numeric(),
@@ -45,6 +44,6 @@ export type UserTypescriptAnnotation = (typeof UserModelBase)['static'];
 
 export const UserModelDTO = new Elysia().model({
   'user.model': UserModelBase,
-  'user.me.response': UserModelRespones,
-  'user.all.response': t.Array(UserModelRespones),
+  'user.me.response': UserModelResponse,
+  'user.all.response': t.Array(UserModelResponse),
 });

@@ -1,26 +1,12 @@
 import Typography from '@/app/ui/Typography';
 import { FooterButtonsBlock } from '@/app/ui/Modal/components/FooterButtonsBlock';
+import { deleteRole } from '@/app/home/dashboard/roles/fetchers/roleFetchers';
 
 interface DeleteRoleModalBodyProps {
   close?: () => void;
   mutateRolePermissions: () => void;
   roleId: number;
 }
-
-const deleteRole = async (roleId: number) => {
-  const url = new URL(
-    `${process.env.FRONTEND_BASE_URL}/home/dashboard/roles/api`,
-  );
-
-  url.searchParams.append('roleId', String(roleId));
-
-  return await fetch(url, {
-    method: 'DELETE',
-    headers: {
-      'Content-type': 'application/json; charset=UTF-8', // Indicates the content
-    },
-  });
-};
 
 export const DeleteRoleModalBody = ({
   close,

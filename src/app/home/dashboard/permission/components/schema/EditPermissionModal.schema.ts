@@ -12,3 +12,5 @@ export const EditPermissionModalSchema = z.object({
     invalid_type_error: 'Поле "имя" не может содержать численные значения',
   }),
 });
+
+export type PermissionModalFormData = z.infer<typeof EditPermissionModalSchema>;

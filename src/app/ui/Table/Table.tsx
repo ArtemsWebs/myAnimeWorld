@@ -11,9 +11,10 @@ import clsx from 'clsx';
 interface TableProps {
   columns: any[];
   data: any[];
+  getRowClassName?: (row: any) => string;
 }
 
-const Table = ({ columns, data }: TableProps) => {
+const Table = ({ columns, data, getRowClassName }: TableProps) => {
   const [pagination, setPagination] = useState({
     pageIndex: 0, //initial page index
     pageSize: 10, //default page size
@@ -58,8 +59,8 @@ const Table = ({ columns, data }: TableProps) => {
             <tr
               key={row.id + row.original.name + index}
               className={clsx(
+                getRowClassName?.(row),
                 'bg-neutral-50 min-h-[60px] border-2 border-b-zinc-300',
-                row.original.isDefaultUser && 'bg-green-200',
               )}
             >
               {row.getVisibleCells().map((cell, index) => (

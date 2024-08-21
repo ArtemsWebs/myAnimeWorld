@@ -1,25 +1,21 @@
 'use client';
 import AnimeCard from '@/app/home/animes/anime/[animeId]/_component/AnimeCard/AnimeCard';
-import { axiosInstance } from '@/app/api/axios/axiosInstans';
 import useSWR from 'swr';
 import { Suspense } from 'react';
-
-const getAnimeById = async (animeId: number) => {
-  if (!animeId) return undefined;
-  return axiosInstance.get('/home/animes/anime/{id}/api', {
-    params: { animeId: animeId },
-  });
-};
+import { getAnimeById } from '@/app/home/animes/fetchers/animeFetchers';
 
 interface AnimePageProps {
   params: { animeId: string };
 }
 
 const AnimePage = ({ params }: AnimePageProps) => {
-  const { data: animeData } = useSWR(params.animeId, getAnimeById);
+  const { data: animeData } = useSWR(params.animeId, async (animeId) => {
+    const { data: animeData } = await getAnimeById(animeId);
+    return animeData;
+  });
   return (
     <Suspense fallback={<>Загрузка</>}>
-      <AnimeCard animeFullInfo={animeData?.data} />
+      <AnimeCard animeFullInfo={animeData ?? undefined} />
     </Suspense>
   );
 };

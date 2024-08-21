@@ -14,7 +14,7 @@ import { useContext } from 'react';
 import { ModalContext } from '@/app/ui/Modal/ModalProvider.config';
 import { EditUserModalBody } from '@/app/home/dashboard/users/components/modal/EditUserModalBody';
 import { getAllUser } from '@/app/home/dashboard/users/fetchers/userFetchers';
-import { uploadFile, uploadImageFile } from '@/app/home/fetcher/homeFetcher';
+import { uploadImageFile } from '@/app/home/fetcher/homeFetcher';
 
 type Person = {
   email: string;
@@ -111,8 +111,22 @@ const Users = () => {
               const { data: response } = await uploadImageFile(
                 user.userImage.originalName,
               );
-              const blob = await response.blob();
-              return { ...user, image: URL.createObjectURL(blob) };
+
+              const chunks = [];
+              //https://developer.mozilla.org/en-US/docs/Web/API/ReadableStream
+              // @ts-expect-error вроде должен робить
+              for await (let chunk of response) {
+                chunks.push(chunk);
+              }
+              console.log(chunks);
+              console.log(new File(chunks, 'rgregerg', { type: 'image/jpg' }));
+
+              return {
+                ...user,
+                image: URL.createObjectURL(
+                  new File(chunks, 'rgregerg', { type: 'image/jpg' }),
+                ),
+              };
             }
             return { ...user };
           }),
@@ -121,7 +135,6 @@ const Users = () => {
       }
       return [];
     },
-    { fallbackData: () => [] },
   );
   const modalContext = useContext(ModalContext);
   return (
@@ -145,7 +158,7 @@ const Users = () => {
         </CreateButton>
       </div>
 
-      <Table columns={columns} data={allUsersWithRoles} />
+      <Table columns={columns} data={allUsersWithRoles ?? []} />
     </>
   );
 };

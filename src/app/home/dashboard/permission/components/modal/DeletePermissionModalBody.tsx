@@ -1,26 +1,12 @@
 import Typography from '@/app/ui/Typography';
 import { FooterButtonsBlock } from '@/app/ui/Modal/components/FooterButtonsBlock';
+import { deletePermission } from '@/app/home/dashboard/permission/fetchers/permissionFetchers';
 
 interface DeletePermissionModalBody {
   close?: () => void;
   mutateRolePermissions: () => void;
   permissionId: number;
 }
-
-const deletePermission = async (roleId: number) => {
-  const url = new URL(
-    `${process.env.FRONTEND_BASE_URL}/home/dashboard/permission/api`,
-  );
-
-  url.searchParams.append('permissionId', String(roleId));
-
-  return await fetch(url, {
-    method: 'DELETE',
-    headers: {
-      'Content-type': 'application/json; charset=UTF-8', // Indicates the content
-    },
-  });
-};
 
 export const DeletePermissionModalBody = ({
   close,

@@ -10,26 +10,13 @@ import { ru } from 'date-fns/locale';
 import { Permission } from '@/app/store/User.types';
 import { useContext, useMemo } from 'react';
 import { IconButton } from '@/app/ui';
-import { EditRoleModalBody } from '@/app/home/dashboard/roles/components/modal/EditRoleModalBody';
 import { TbEditCircle } from 'react-icons/tb';
-import { DeleteRoleModalBody } from '@/app/home/dashboard/roles/components/modal/DeleteRoleModalBody';
 import { AiFillDelete } from 'react-icons/ai';
 import { ModalContext } from '@/app/ui/Modal/ModalProvider.config';
 import { DeletePermissionModalBody } from '@/app/home/dashboard/permission/components/modal/DeletePermissionModalBody';
 import { EditPermissionModalBody } from '@/app/home/dashboard/permission/components/modal/EditPermissionModalBody';
 import CreateButton from '@/app/ui/Buttons/CreateButton';
-
-const getAllPermissions = async (_key: string) => {
-  return await fetch(
-    `${process.env.FRONTEND_BASE_URL}/home/dashboard/permission/api`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-      },
-    },
-  );
-};
+import { getAllPermissions } from './fetchers/permissionFetchers';
 
 const columnHelper = createColumnHelper<Permission>();
 
@@ -78,12 +65,9 @@ const Permissions = () => {
   const { data: allPermissions, mutate: mutatePermission } = useSWR(
     '_getAllPermission',
     async (_key) => {
-      const allPermissions = await getAllPermissions(_key).then(
-        async (res) => await res.json(),
-      );
+      const { data: allPermissions } = await getAllPermissions();
       return allPermissions;
     },
-    { fallbackData: () => [] },
   );
 
   const modalContext = useContext(ModalContext);
@@ -112,7 +96,7 @@ const Permissions = () => {
               <div
                 className={'w-[30px] h-[30px] flex items-center justify-center'}
               >
-                <TbEditCircle size={24} />
+                <TbEditCircle size={24} color={'green'} />
               </div>
             </IconButton>
             <IconButton
@@ -133,7 +117,7 @@ const Permissions = () => {
               <div
                 className={'w-[30px] h-[30px] flex items-center justify-center'}
               >
-                <AiFillDelete size={24} />
+                <AiFillDelete size={24} className={'fill-red-400'} />
               </div>
             </IconButton>
           </div>
@@ -167,10 +151,7 @@ const Permissions = () => {
           Полномочие
         </CreateButton>
       </div>
-      <Table
-        columns={actualColumns}
-        data={allPermissions?.allPermissions ?? []}
-      />
+      <Table columns={actualColumns} data={allPermissions ?? []} />
     </>
   );
 };
