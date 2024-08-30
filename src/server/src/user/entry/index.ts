@@ -6,13 +6,22 @@ import {
   updateUser,
 } from '../domain';
 import { UserModelDTO } from '../model/user.model';
+import { ServerError } from '@/server/lib/serverError';
 
 export const userRouters = new Elysia({ prefix: '/user' })
   .use(UserModelDTO)
   .get(
     '/me',
-    async ({ query }) => {
-      const userInfo = await getDomainUser(query.email);
+    async ({ query: { email } }) => {
+      const userInfo = await getDomainUser(email);
+      if (!userInfo) {
+        throw new ServerError(
+          'AuthorizationError',
+          '422',
+          'Пользователь не найден',
+          true,
+        );
+      }
       return userInfo;
     },
     {
@@ -35,9 +44,7 @@ export const userRouters = new Elysia({ prefix: '/user' })
     async ({ body }) => {
       return await createUser(body);
     },
-    {
-      body: 'user.model',
-    },
+    { body: 'user.model.body.create' },
   )
   .put(
     '/updateUser/:userId',
@@ -46,7 +53,7 @@ export const userRouters = new Elysia({ prefix: '/user' })
     },
     {
       params: t.Object({ userId: t.String() }),
-      body: 'user.model',
+      body: 'user.model.body.update',
     },
   )
   .delete('/deleteUser/:userId', async ({ params: { userId } }) => {}, {

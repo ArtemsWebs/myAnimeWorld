@@ -3,9 +3,10 @@ import { AnimeT } from '@/app/home/animes/types';
 import { useRouter } from 'next/navigation';
 import { ComponentPropsWithoutRef } from 'react';
 import InfoRow from '@/app/ui/InfoRow/InfoRow';
+import { AnimeModelResponse } from '@/server/src/anime/model/anime.model';
 
 interface AnimeSwiperCardProps extends ComponentPropsWithoutRef<'div'> {
-  anime: AnimeT;
+  anime: AnimeModelResponse;
 }
 
 const AnimeSwiperCard = ({ anime, ...props }: AnimeSwiperCardProps) => {
@@ -14,7 +15,7 @@ const AnimeSwiperCard = ({ anime, ...props }: AnimeSwiperCardProps) => {
     <div
       {...props}
       className={'group w-[300px] h-[400px] cursor-pointer relative'}
-      onClick={() => router.push(`/home/animes/anime/${anime.mal_id}`)}
+      onClick={() => router.push(`/home/animes/anime/${anime.malId}`)}
     >
       <img
         src={anime.images.jpg?.large_image_url}
@@ -26,7 +27,7 @@ const AnimeSwiperCard = ({ anime, ...props }: AnimeSwiperCardProps) => {
         }
       >
         <div className={'flex flex-col  h-full justify-end'}>
-          <InfoRow title="Название" value={anime.title_english} />
+          <InfoRow title="Название" value={anime.titleEnglish} />
           <InfoRow title="Статус" value={anime.status} />
           <InfoRow title="Сезон" value={anime.season} />
           <InfoRow title="Эпизод" value={anime.episodes} />

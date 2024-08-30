@@ -15,12 +15,12 @@ export const RoleModelBase = t.Object({
   ),
 });
 
-const RoleModelSuccessResponse = t.Object({
+export const RoleModelSuccessResponse = t.Object({
   id: t.Numeric(),
   name: t.String(),
   createdAt: t.Date(),
   updatedAt: t.Date(),
-  description: t.Nullable(t.String()),
+  description: t.String(),
   isDefaultUser: t.Boolean(),
   permission: t.Array(
     t.Object({

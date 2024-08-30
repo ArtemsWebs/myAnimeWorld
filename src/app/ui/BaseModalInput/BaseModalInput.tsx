@@ -1,12 +1,14 @@
-import React, {
+import {
+  DetailedHTMLProps,
   FormEvent,
+  forwardRef,
   ForwardRefRenderFunction,
   InputHTMLAttributes,
 } from 'react';
 import Typography from '@/app/ui/Typography';
 
 interface BaseModalInputProps
-  extends React.DetailedHTMLProps<
+  extends DetailedHTMLProps<
     InputHTMLAttributes<HTMLInputElement>,
     HTMLInputElement
   > {
@@ -49,4 +51,4 @@ const BaseModalInput: ForwardRefRenderFunction<
     </div>
   );
 };
-export default React.forwardRef(BaseModalInput);
+export default forwardRef(BaseModalInput);

@@ -3,13 +3,17 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { useMemo } from 'react';
 import { AnimeT } from '@/app/home/animes/types';
 import AnimeSwiperCard from '@/app/home/animes/component/AnimeSwiperCard';
+import { AnimeModelResponse } from '@/server/src/anime/model/anime.model';
 
 interface AnimeListProps {
-  animeList?: AnimeT[];
+  animeList?: AnimeModelResponse[];
   listTitle?: string;
 }
 
-const splitDataForSlides = (delimetr: number, animeList?: AnimeT[]) => {
+const splitDataForSlides = (
+  delimetr: number,
+  animeList?: AnimeModelResponse[],
+) => {
   if (!animeList) return [];
   const parts = animeList.length / delimetr;
   const emptyPartsArray = Array(parts).fill(null) as null[];
@@ -23,8 +27,6 @@ const AnimeList = ({ animeList, listTitle }: AnimeListProps) => {
     () => splitDataForSlides(8, animeList),
     [animeList],
   );
-  new Set();
-
   return (
     <div className={'w-full min-h-5'}>
       <p className={'text-2xl text-white'}>{listTitle}</p>
@@ -49,7 +51,7 @@ const AnimeList = ({ animeList, listTitle }: AnimeListProps) => {
             key={index}
           >
             {animes.map((anime, index) => (
-              <AnimeSwiperCard anime={anime} key={anime.mal_id + index} />
+              <AnimeSwiperCard anime={anime} key={anime.malId + index} />
             ))}
           </SwiperSlide>
         ))}

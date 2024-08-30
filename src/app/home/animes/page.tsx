@@ -49,7 +49,7 @@ const Animes = () => {
         ></video>
       </div>
       <div className={'px-[48px] py-[32px]'}>
-        <AnimeList animeList={animes?.data} listTitle="Онгоинги" />
+        <AnimeList animeList={animes?.data ?? []} listTitle="Онгоинги" />
       </div>
     </Show>
   );

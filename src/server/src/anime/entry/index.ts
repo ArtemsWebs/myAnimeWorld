@@ -1,16 +1,20 @@
 import { Elysia, t } from 'elysia';
 import { getAnime, getAnimes } from '../domain';
-import { AnimeModelDTO } from '@/server/src/anime/model/anime.model';
+import {
+  AnimeModelDTO,
+  AnimeModelResponse,
+} from '@/server/src/anime/model/anime.model';
 
 export const animeRouters = new Elysia({ prefix: '/animes' })
   .use(AnimeModelDTO)
   .get(
     '/allAnimes',
-    async ({ params: { offset, limit } }) => {
-      return await getAnimes(offset, limit);
+    async ({ query: { offset, limit } }) => {
+      const animes = await getAnimes(offset, limit);
+      return animes as AnimeModelResponse[];
     },
     {
-      params: t.Object({
+      query: t.Object({
         offset: t.Numeric(),
         limit: t.Numeric(),
       }),
@@ -20,7 +24,7 @@ export const animeRouters = new Elysia({ prefix: '/animes' })
   .get(
     '/anime/:animeId',
     async ({ params: { animeId } }) => {
-      return await getAnime(animeId);
+      return (await getAnime(animeId)) as AnimeModelResponse;
     },
     {
       params: t.Object({

@@ -10,7 +10,7 @@ import { ServerError } from '../../../lib/serverError';
 export const getAnimes = async (offset: number, limit: number) => {
   const ourAnimes = await getAnimesDB(offset, limit);
   try {
-    if (!ourAnimes || ourAnimes.length < offset) {
+    if (!ourAnimes || ourAnimes.length < offset * limit) {
       const foreignAnimes = await fetch(
         `https://api.jikan.moe/v4/anime?page=${offset}&limit=${limit}&status=airing&order_by=popularity`,
       ).then((response) => response.json());
@@ -36,7 +36,10 @@ export const getAnimes = async (offset: number, limit: number) => {
         }
       }
     }
-  } catch (err) {}
+    return ourAnimes;
+  } catch (err) {
+    return err;
+  }
 };
 
 export const getAnime = async (animeId: number) => {

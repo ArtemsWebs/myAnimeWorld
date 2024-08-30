@@ -11,5 +11,7 @@ export const getAnimes = async ({
   offset: number;
   limit: number;
 }) => {
-  return await fetcherClient.api.v1.animes.allAnimes.get();
+  return await fetcherClient.api.v1.animes.allAnimes.get({
+    query: { offset, limit },
+  });
 };

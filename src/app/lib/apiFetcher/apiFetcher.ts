@@ -11,6 +11,7 @@ const getBaseUrl = () => {
 export const fetcherClient = treaty<ElysiaApp>(getBaseUrl(), {
   async onResponse(response) {
     const json = await response.json();
+
     const superjsonMeta = response.headers.get('superjson-meta');
     const val = superjsonMeta
       ? SuperJSON.deserialize({ json, meta: JSON.parse(superjsonMeta) })
@@ -22,7 +23,6 @@ export const fetcherClient = treaty<ElysiaApp>(getBaseUrl(), {
   },
   fetcher: async (...params) => {
     const response = await fetch(...params);
-
     if (!response.ok) {
       let message = '';
       try {

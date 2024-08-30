@@ -1,7 +1,14 @@
-import { createUserDB, getAllUser, getUser, updateUserDB } from '../dataAccess';
-import { UserTypescriptAnnotation } from '../model/user.model';
+import {
+  createUserDB,
+  getAllUser,
+  getFileByUserId,
+  getUser,
+  updateUserDB,
+} from '../dataAccess';
+import { UserModelBodyCreate, UserModelBodyUpdate } from '../model/user.model';
 import { nanoid } from 'nanoid';
 import { putFile } from '../../minio/libs/putFile';
+import { hash } from 'bcrypt';
 
 export const getDomainUser = async (email: string) => {
   return await getUser(email);
@@ -10,14 +17,49 @@ export const getAllDomainUsers = async () => {
   return await getAllUser();
 };
 
-export const createUser = async (body: UserTypescriptAnnotation) => {
-  const uniqueFileName = `${nanoid(5)}-${body?.image.name}`;
-  await putFile(body.image, uniqueFileName);
-  return await createUserDB(body, uniqueFileName);
+export const createUser = async (body: UserModelBodyCreate) => {
+  let uniqueFileName = '';
+
+  if (body.image) {
+    uniqueFileName = `${nanoid(5)}-${body?.image.name}`;
+    await putFile(body.image, uniqueFileName);
+  }
+
+  const hashedPassword = await hash(body.hashedPassword, 12);
+  const userWithHashedPassword = {
+    ...body,
+    roles: body.roles.map((role) => Number(role)),
+    hashedPassword,
+  };
+
+  return await createUserDB(userWithHashedPassword, uniqueFileName);
 };
-export const updateUser = async (
-  userId: string,
-  body: UserTypescriptAnnotation,
-) => {
-  return await updateUserDB(userId, body);
+export const updateUser = async (userId: string, body: UserModelBodyUpdate) => {
+  let userWithHashedPassword = body;
+  if (body.hashedPassword) {
+    const hashedPassword = await hash(body.hashedPassword, 12);
+    userWithHashedPassword = {
+      ...body,
+      roles: body.roles.map((role) => Number(role)),
+      hashedPassword,
+    };
+  }
+
+  const userPhoto = await getFileByUserId(userId);
+  let uniqueFileName = '';
+
+  if (
+    userPhoto &&
+    body?.image?.size === userPhoto.size &&
+    body.image.name === userPhoto.fileName
+  ) {
+    return await updateUserDB(userId, userWithHashedPassword);
+  }
+  if (body.image) {
+    uniqueFileName = `${nanoid(5)}-${body?.image.name}`;
+    await putFile(body.image, uniqueFileName);
+    return await updateUserDB(userId, userWithHashedPassword, uniqueFileName);
+  }
+
+  return await updateUserDB(userId, userWithHashedPassword);
 };

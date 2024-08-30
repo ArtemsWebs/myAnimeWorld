@@ -10,11 +10,13 @@ import { format } from 'date-fns/format';
 import { ru } from 'date-fns/locale';
 import { Role } from '@/app/store/User.types';
 import CreateButton from '@/app/ui/Buttons/CreateButton';
-import { useContext } from 'react';
+import { useContext, useMemo } from 'react';
 import { ModalContext } from '@/app/ui/Modal/ModalProvider.config';
 import { EditUserModalBody } from '@/app/home/dashboard/users/components/modal/EditUserModalBody';
 import { getAllUser } from '@/app/home/dashboard/users/fetchers/userFetchers';
-import { uploadImageFile } from '@/app/home/fetcher/homeFetcher';
+import { IconButton } from '@/app/ui';
+import { TbEditCircle } from 'react-icons/tb';
+import { UserTypescriptAnnotation } from '@/server/src/user/model/user.model';
 
 type Person = {
   email: string;
@@ -25,7 +27,7 @@ type Person = {
   updatedAt: string;
 };
 
-const columnHelper = createColumnHelper<Person>();
+const columnHelper = createColumnHelper<UserTypescriptAnnotation>();
 
 const columns = [
   columnHelper.accessor('name', {
@@ -108,24 +110,9 @@ const Users = () => {
         const usersWithImage = await Promise.all(
           allUsers.map(async (user) => {
             if (user.userImage) {
-              const { data: response } = await uploadImageFile(
-                user.userImage.originalName,
-              );
-
-              const chunks = [];
-              //https://developer.mozilla.org/en-US/docs/Web/API/ReadableStream
-              // @ts-expect-error вроде должен робить
-              for await (let chunk of response) {
-                chunks.push(chunk);
-              }
-              console.log(chunks);
-              console.log(new File(chunks, 'rgregerg', { type: 'image/jpg' }));
-
               return {
                 ...user,
-                image: URL.createObjectURL(
-                  new File(chunks, 'rgregerg', { type: 'image/jpg' }),
-                ),
+                image: `${process.env.FRONTEND_BASE_URL}/api/v1/minio/uploadImageFile/${user.userImage.originalName}`,
               };
             }
             return { ...user };
@@ -137,6 +124,65 @@ const Users = () => {
     },
   );
   const modalContext = useContext(ModalContext);
+
+  const dynamicColumn = useMemo(
+    () => [
+      columnHelper.accessor('updatedAt', {
+        header: '',
+        cell: (info) => (
+          <div className={'flex gap-4'}>
+            <IconButton
+              title={'Редактировать роль'}
+              onClick={() => {
+                modalContext?.open?.({
+                  title: 'Редактировать роль',
+                  bodyComponent: (close) => (
+                    <EditUserModalBody
+                      userItem={info.row.original}
+                      close={close}
+                      mutateAllUsersWithRoles={() => mutateAllUsersWithRoles()}
+                    />
+                  ),
+                });
+              }}
+            >
+              <div
+                className={
+                  'w-[30px] h-[30px] rounded-lg flex items-center justify-center'
+                }
+              >
+                <TbEditCircle size={24} color={'green'} />
+              </div>
+            </IconButton>
+            {/*<IconButton*/}
+            {/*  onClick={() => {*/}
+            {/*    modalContext?.open?.({*/}
+            {/*      title: 'Удалить роль',*/}
+            {/*      bodyComponent: (close) => (*/}
+            {/*        <DeleteRoleModalBody*/}
+            {/*          close={close}*/}
+            {/*          mutateRolePermissions={() => mutateAllUsersWithRoles()}*/}
+            {/*          roleId={info.row.original.id}*/}
+            {/*        />*/}
+            {/*      ),*/}
+            {/*    });*/}
+            {/*  }}*/}
+            {/*  title={'Удалить роль'}*/}
+            {/*>*/}
+            {/*  <div*/}
+            {/*    className={*/}
+            {/*      'w-[30px] h-[30px] rounded-lg flex items-center justify-center'*/}
+            {/*    }*/}
+            {/*  >*/}
+            {/*    <AiFillDelete size={24} className={'fill-red-400'} />*/}
+            {/*  </div>*/}
+            {/*</IconButton>*/}
+          </div>
+        ),
+      }),
+    ],
+    [modalContext, mutateAllUsersWithRoles],
+  );
   return (
     <>
       <div className="flex items-center justify-between pb-5">
@@ -158,7 +204,10 @@ const Users = () => {
         </CreateButton>
       </div>
 
-      <Table columns={columns} data={allUsersWithRoles ?? []} />
+      <Table
+        columns={[...columns, ...dynamicColumn]}
+        data={allUsersWithRoles ?? []}
+      />
     </>
   );
 };
