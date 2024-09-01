@@ -9,7 +9,9 @@ export const getUser = async (email: string) => {
       hashedPassword: true,
     },
     include: {
-      roles: { select: { permission: true, name: true, description: true } },
+      roles: {
+        select: { permission: true, name: true, description: true, id: true },
+      },
       userImage: true,
     },
     where: { email: email },
@@ -25,7 +27,9 @@ export const getAllUser = async () => {
       },
     ],
     include: {
-      roles: { select: { permission: true, name: true, description: true } },
+      roles: {
+        select: { permission: true, name: true, description: true, id: true },
+      },
       userImage: true,
     },
   });
@@ -94,6 +98,13 @@ export const updateUserDB = async (
           fileName: uniqueFileName,
           originalName: body.image.name,
           size: body.image.size,
+        },
+      });
+    } else {
+      await prismaDb.file.update({
+        where: { userId },
+        data: {
+          user: { disconnect: true },
         },
       });
     }

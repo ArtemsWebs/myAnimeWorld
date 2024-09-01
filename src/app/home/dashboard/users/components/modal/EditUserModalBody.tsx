@@ -18,6 +18,7 @@ import { getAllRoles } from '@/app/home/dashboard/fetchers';
 import { UserModelResponse } from '@/server/src/user/model/user.model';
 import { omit } from 'lodash';
 import Checkbox from '@/app/ui/Checkbox/Checkbox';
+import PasswordInput from '@/app/ui/PasswordInput/PasswordInput';
 
 interface EditUserModalBodyProps {
   close?: () => void;
@@ -39,7 +40,11 @@ export const EditUserModalBody = ({
     formState: { isSubmitting, isValid, errors },
   } = useForm<EditUserModalType>({
     resolver: zodResolver(EditUserModalSchema),
-    defaultValues: { ...userItem, password: '', confirm: '', roles: [] },
+    defaultValues: {
+      name: userItem?.name ?? '',
+      email: userItem?.email ?? '',
+      roles: userItem?.roles ?? [],
+    },
   });
 
   const [fileData, setFileData] = useState<FileList | null>(null);
@@ -57,7 +62,10 @@ export const EditUserModalBody = ({
         credentials: 'include',
       });
       const blobFile = await responseFile.blob();
-      return new File([blobFile], 'any');
+      return new File(
+        [blobFile],
+        userItem?.userImage?.originalName ?? 'ewfregre',
+      );
     },
     {
       onSuccess: (file) => setFileData([file] as unknown as FileList),
@@ -182,7 +190,7 @@ export const EditUserModalBody = ({
           name="password"
           render={({ field, fieldState, formState }) => {
             return (
-              <BaseModalInput
+              <PasswordInput
                 {...field}
                 disabled={userItem && !accessPassword}
                 className="w-1/2"
@@ -201,7 +209,7 @@ export const EditUserModalBody = ({
           name="confirm"
           render={({ field, fieldState, formState }) => {
             return (
-              <BaseModalInput
+              <PasswordInput
                 {...field}
                 disabled={userItem && !accessPassword}
                 className={'w-1/2'}

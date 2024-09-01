@@ -6,6 +6,7 @@ import {
   InputHTMLAttributes,
 } from 'react';
 import Typography from '@/app/ui/Typography';
+import clsx from 'clsx';
 
 interface BaseModalInputProps
   extends DetailedHTMLProps<
@@ -15,6 +16,7 @@ interface BaseModalInputProps
   label: string;
   onChange: (e: FormEvent<HTMLInputElement>) => void;
   className?: string;
+  inputStyles?: string;
   errorText?: string;
 }
 
@@ -22,7 +24,15 @@ const BaseModalInput: ForwardRefRenderFunction<
   HTMLInputElement,
   BaseModalInputProps
 > = (
-  { label, onChange, errorText, className, type = 'text', ...props },
+  {
+    label,
+    onChange,
+    errorText,
+    inputStyles,
+    className,
+    type = 'text',
+    ...props
+  },
   ref,
 ) => {
   return (
@@ -39,7 +49,10 @@ const BaseModalInput: ForwardRefRenderFunction<
         onChange={onChange}
         type={type}
         id="first_name"
-        className="bg-gray-50 block w-full p-2.5 border  border-gray-300  text-sm rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500  focus-visible:border-blue-500 focus-visible:ring-blue-500"
+        className={clsx(
+          'bg-gray-50 block w-full p-2.5 border  border-gray-300  text-sm rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500  focus-visible:border-blue-500 focus-visible:ring-blue-500',
+          inputStyles,
+        )}
         placeholder="John"
         required
       />

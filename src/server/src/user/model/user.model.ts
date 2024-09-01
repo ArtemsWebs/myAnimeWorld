@@ -45,6 +45,7 @@ export const UserModelResponse = t.Object({
   ),
   roles: t.Array(
     t.Object({
+      id: t.Number(),
       name: t.String(),
       permission: t.Array(
         t.Object({

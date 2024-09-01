@@ -135,7 +135,7 @@ const Users = () => {
               title={'Редактировать роль'}
               onClick={() => {
                 modalContext?.open?.({
-                  title: 'Редактировать роль',
+                  title: 'Редактировать пользователя',
                   bodyComponent: (close) => (
                     <EditUserModalBody
                       userItem={info.row.original}

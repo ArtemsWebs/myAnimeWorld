@@ -9,6 +9,7 @@ import { UserModelBodyCreate, UserModelBodyUpdate } from '../model/user.model';
 import { nanoid } from 'nanoid';
 import { putFile } from '../../minio/libs/putFile';
 import { hash } from 'bcrypt';
+import { deleteFileMinio } from '@/server/src/minio/libs/minioFileHandlers';
 
 export const getDomainUser = async (email: string) => {
   return await getUser(email);
@@ -36,6 +37,7 @@ export const createUser = async (body: UserModelBodyCreate) => {
 };
 export const updateUser = async (userId: string, body: UserModelBodyUpdate) => {
   let userWithHashedPassword = body;
+
   if (body.hashedPassword) {
     const hashedPassword = await hash(body.hashedPassword, 12);
     userWithHashedPassword = {
@@ -44,7 +46,6 @@ export const updateUser = async (userId: string, body: UserModelBodyUpdate) => {
       hashedPassword,
     };
   }
-
   const userPhoto = await getFileByUserId(userId);
   let uniqueFileName = '';
 
@@ -55,11 +56,16 @@ export const updateUser = async (userId: string, body: UserModelBodyUpdate) => {
   ) {
     return await updateUserDB(userId, userWithHashedPassword);
   }
+
   if (body.image) {
     uniqueFileName = `${nanoid(5)}-${body?.image.name}`;
     await putFile(body.image, uniqueFileName);
     return await updateUserDB(userId, userWithHashedPassword, uniqueFileName);
   }
+
+  // if (!body.image && userPhoto?.fileName) {
+  //   await deleteFileMinio(userPhoto.fileName);
+  // }
 
   return await updateUserDB(userId, userWithHashedPassword);
 };

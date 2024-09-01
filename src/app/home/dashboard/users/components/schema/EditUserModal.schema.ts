@@ -7,19 +7,19 @@ export const EditUserModalSchema = z
       invalid_type_error: 'Поле "имя" не может содержать численные значения',
     }),
     email: z.string().email({ message: 'Невалидный email адрес' }),
-    password: z.string().default('').optional(),
-    confirm: z.string().default('').optional(),
+    password: z.string().default(''),
+    confirm: z.string().default(''),
     accessChangePassword: z.boolean().optional().default(false),
     roles: z
       .array(
         z.object({
-          name: z.string(),
-          description: z.string(),
           id: z.number(),
+          name: z.string(),
+          description: z.string().nullable(),
           permission: z.array(
             z.object({
               name: z.string(),
-              description: z.string(),
+              description: z.string().nullable(),
               id: z.number(),
             }),
           ),
@@ -42,7 +42,7 @@ export const EditUserModalSchema = z
   .refine(
     (data) => {
       if (data.accessChangePassword) {
-        return !(!!data.password && data.password?.length < 4);
+        return data.password.length >= 4;
       }
       return true;
     },
