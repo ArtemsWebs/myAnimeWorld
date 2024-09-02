@@ -1,6 +1,7 @@
 import { Elysia, t } from 'elysia';
 import {
   createUser,
+  deleteUser,
   getAllDomainUsers,
   getDomainUser,
   updateUser,
@@ -30,7 +31,7 @@ export const userRouters = new Elysia({ prefix: '/user' })
     },
   )
   .get(
-    '/allUsers',
+    '/all',
     async () => {
       const allUsers = await getAllDomainUsers();
       return allUsers;
@@ -40,14 +41,14 @@ export const userRouters = new Elysia({ prefix: '/user' })
     },
   )
   .post(
-    '/createUser',
+    '/create',
     async ({ body }) => {
       return await createUser(body);
     },
     { body: 'user.model.body.create' },
   )
   .put(
-    '/updateUser/:userId',
+    '/update/:userId',
     async ({ params: { userId }, body }) => {
       return await updateUser(userId, body);
     },
@@ -56,6 +57,12 @@ export const userRouters = new Elysia({ prefix: '/user' })
       body: 'user.model.body.update',
     },
   )
-  .delete('/deleteUser/:userId', async ({ params: { userId } }) => {}, {
-    params: t.Object({ userId: t.String() }),
-  });
+  .delete(
+    '/deleteUser/:userId',
+    async ({ params: { userId } }) => {
+      return await deleteUser(userId);
+    },
+    {
+      params: t.Object({ userId: t.String() }),
+    },
+  );

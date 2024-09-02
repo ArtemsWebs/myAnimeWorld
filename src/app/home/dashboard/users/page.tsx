@@ -16,7 +16,12 @@ import { EditUserModalBody } from '@/app/home/dashboard/users/components/modal/E
 import { getAllUser } from '@/app/home/dashboard/users/fetchers/userFetchers';
 import { IconButton } from '@/app/ui';
 import { TbEditCircle } from 'react-icons/tb';
-import { UserTypescriptAnnotation } from '@/server/src/user/model/user.model';
+import {
+  UserModelResponse,
+  UserTypescriptAnnotation,
+} from '@/server/src/user/model/user.model';
+import { DeleteUserModalBody } from '@/app/home/dashboard/users/components/modal/DeleteUserModalBody';
+import { AiFillDelete } from 'react-icons/ai';
 
 type Person = {
   email: string;
@@ -27,7 +32,7 @@ type Person = {
   updatedAt: string;
 };
 
-const columnHelper = createColumnHelper<UserTypescriptAnnotation>();
+const columnHelper = createColumnHelper<UserModelResponse>();
 
 const columns = [
   columnHelper.accessor('name', {
@@ -154,29 +159,29 @@ const Users = () => {
                 <TbEditCircle size={24} color={'green'} />
               </div>
             </IconButton>
-            {/*<IconButton*/}
-            {/*  onClick={() => {*/}
-            {/*    modalContext?.open?.({*/}
-            {/*      title: 'Удалить роль',*/}
-            {/*      bodyComponent: (close) => (*/}
-            {/*        <DeleteRoleModalBody*/}
-            {/*          close={close}*/}
-            {/*          mutateRolePermissions={() => mutateAllUsersWithRoles()}*/}
-            {/*          roleId={info.row.original.id}*/}
-            {/*        />*/}
-            {/*      ),*/}
-            {/*    });*/}
-            {/*  }}*/}
-            {/*  title={'Удалить роль'}*/}
-            {/*>*/}
-            {/*  <div*/}
-            {/*    className={*/}
-            {/*      'w-[30px] h-[30px] rounded-lg flex items-center justify-center'*/}
-            {/*    }*/}
-            {/*  >*/}
-            {/*    <AiFillDelete size={24} className={'fill-red-400'} />*/}
-            {/*  </div>*/}
-            {/*</IconButton>*/}
+            <IconButton
+              onClick={() => {
+                modalContext?.open?.({
+                  title: 'Удалить пользователя',
+                  bodyComponent: (close) => (
+                    <DeleteUserModalBody
+                      close={close}
+                      mutateRolePermissions={() => mutateAllUsersWithRoles()}
+                      userId={info.row.original.id}
+                    />
+                  ),
+                });
+              }}
+              title="Удалить пользователя"
+            >
+              <div
+                className={
+                  'w-[30px] h-[30px] rounded-lg flex items-center justify-center'
+                }
+              >
+                <AiFillDelete size={24} className={'fill-red-400'} />
+              </div>
+            </IconButton>
           </div>
         ),
       }),

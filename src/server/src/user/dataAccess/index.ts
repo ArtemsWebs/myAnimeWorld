@@ -68,15 +68,17 @@ export const createUserDB = async (
   }
 };
 
-export const getFileByUserId = async (userId: string) => {
-  return prismaDb.file.findUnique({ where: { userId } });
-};
-
-export const updateUserDB = async (
-  userId: string,
-  body: UserModelBodyUpdate,
-  uniqueFileName?: string,
-) => {
+export const updateUserDB = async ({
+  userId,
+  body,
+  uniqueFileName,
+  updateFile = true,
+}: {
+  userId: string;
+  body: UserModelBodyUpdate;
+  uniqueFileName?: string;
+  updateFile?: boolean;
+}) => {
   try {
     const updatedUser = await prismaDb.user.update({
       where: { id: userId },
@@ -91,16 +93,25 @@ export const updateUserDB = async (
       },
     });
     if (body.image && uniqueFileName) {
-      await prismaDb.file.update({
+      await prismaDb.file.upsert({
         where: { userId },
-        data: {
+        update: {
           bucket: 'images',
           fileName: uniqueFileName,
           originalName: body.image.name,
           size: body.image.size,
+          userId: userId,
+        },
+        create: {
+          bucket: 'images',
+          fileName: uniqueFileName,
+          originalName: body.image.name,
+          size: body.image.size,
+          userId: userId,
         },
       });
-    } else {
+    }
+    if (!body.image && !uniqueFileName && updateFile) {
       await prismaDb.file.update({
         where: { userId },
         data: {
@@ -112,4 +123,12 @@ export const updateUserDB = async (
   } catch (e) {
     return e;
   }
+};
+
+export const deleteUserDB = async (userId: string, isDeleteFile: boolean) => {
+  if (!isDeleteFile) {
+    await prismaDb.file.delete({ where: { userId } });
+  }
+  const deletedUser = await prismaDb.user.delete({ where: { id: userId } });
+  return deletedUser;
 };

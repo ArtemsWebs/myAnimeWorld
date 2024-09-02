@@ -1,7 +1,7 @@
 import {
   createUserDB,
+  deleteUserDB,
   getAllUser,
-  getFileByUserId,
   getUser,
   updateUserDB,
 } from '../dataAccess';
@@ -10,6 +10,7 @@ import { nanoid } from 'nanoid';
 import { putFile } from '../../minio/libs/putFile';
 import { hash } from 'bcrypt';
 import { deleteFileMinio } from '@/server/src/minio/libs/minioFileHandlers';
+import { getFileByUserId } from '@/server/src/file/dataAccess';
 
 export const getDomainUser = async (email: string) => {
   return await getUser(email);
@@ -54,18 +55,35 @@ export const updateUser = async (userId: string, body: UserModelBodyUpdate) => {
     body?.image?.size === userPhoto.size &&
     body.image.name === userPhoto.fileName
   ) {
-    return await updateUserDB(userId, userWithHashedPassword);
-  }
-
-  if (body.image) {
+    return await updateUserDB({
+      userId,
+      body: userWithHashedPassword,
+      updateFile: false,
+    });
+  } else if (body.image) {
     uniqueFileName = `${nanoid(5)}-${body?.image.name}`;
     await putFile(body.image, uniqueFileName);
-    return await updateUserDB(userId, userWithHashedPassword, uniqueFileName);
+    return await updateUserDB({
+      userId,
+      body: userWithHashedPassword,
+      uniqueFileName,
+    });
+  }
+  if (!body.image && userPhoto?.fileName) {
+    await deleteFileMinio(userPhoto.fileName);
   }
 
-  // if (!body.image && userPhoto?.fileName) {
-  //   await deleteFileMinio(userPhoto.fileName);
-  // }
+  return await updateUserDB({
+    userId,
+    body: userWithHashedPassword,
+    updateFile: true,
+  });
+};
 
-  return await updateUserDB(userId, userWithHashedPassword);
+export const deleteUser = async (userId: string) => {
+  const userPhoto = await getFileByUserId(userId);
+  if (userPhoto) {
+    await deleteFileMinio(userPhoto.fileName);
+  }
+  return await deleteUserDB(userId, !userPhoto);
 };
