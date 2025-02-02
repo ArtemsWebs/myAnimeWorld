@@ -9,11 +9,11 @@ export const getAllUser = async (_key: string) => {
 };
 
 export const createUser = async (body: UserModelBodyCreate) => {
-  return await fetcherClient.api.v1.user.create.post(body);
+  return await fetcherClient.api.v1.user.createUser.post(body);
 };
 
 export const updateUser = async (body: UserModelBodyUpdate, userId: string) => {
-  return await fetcherClient.api.v1.user.update({ userId }).put(body);
+  return await fetcherClient.api.v1.user.updateUser({ userId }).put(body);
 };
 
 export const deleteUser = async (userId: string) => {

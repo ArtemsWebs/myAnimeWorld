@@ -10,3 +10,6 @@ export { default as Select } from '@/app/ui/Select/Select';
 export { default as Show } from '@/app/ui/Show/Show';
 export { default as SuccesButton } from '@/app/ui/SuccesButton/SuccesButton';
 export { default as ToggleButtons } from '@/app/ui/ToggleButtons/ToggleButtons';
+export { default as Typography } from '@/app/ui/Typography';
+export { default as Checkbox } from '@/app/ui/Checkbox/Checkbox';
+export { default as BaseModalInput } from '@/app/ui/BaseModalInput/BaseModalInput';

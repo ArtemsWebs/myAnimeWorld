@@ -1,11 +1,13 @@
 import {
   createAnimes,
   createNewAnime,
+  editAnimeByIdDb,
   getAnimeById,
   getAnimesDB,
 } from '../dataAccess';
 import { AnimeT } from '../dataAccess/types';
 import { ServerError } from '../../../lib/serverError';
+import { AnimeModelEditBody } from '@/server/src/anime/model/anime.model';
 
 export const getAnimes = async (offset: number, limit: number) => {
   const ourAnimes = await getAnimesDB(offset, limit);
@@ -78,4 +80,11 @@ export const getAnime = async (animeId: number) => {
   } catch (e: any) {
     throw e;
   }
+};
+
+export const editAnimeByIdDomain = async (
+  animeId: number,
+  body: AnimeModelEditBody,
+) => {
+  return editAnimeByIdDb(animeId, body);
 };

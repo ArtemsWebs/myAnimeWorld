@@ -1,3 +1,4 @@
+'use client';
 import SettingsNavbar from './_components/SettingsNavbar/SettingsNavbar';
 import { GiEgyptianProfile } from 'react-icons/gi';
 import { SiYoutubestudio } from 'react-icons/si';
@@ -29,8 +30,8 @@ export default function SettingsLayout({
 }>) {
   return (
     <div className="my-[24px] mx-[24px] flex ">
-      <SettingsNavbar items={navbarItems} />e
-      {/* <Divider orientation="vertical" /> */}
+      <SettingsNavbar items={navbarItems} />
+      {/*<Divider orientation="vertical" />*/}
       <div style={{ width: 'calc(100% - 250px)' }}>{children}</div>
     </div>
   );

@@ -15,6 +15,7 @@ type CustomSelectProps<
 > = Props<Option, IsMulti, Group> & {
   className?: string;
   label?: string;
+  labelClassNames?: string;
   ref?: any;
 };
 
@@ -45,6 +46,7 @@ const CustomSelect = <
   options,
   label,
   className,
+  labelClassNames,
   ref,
   ...props
 }: CustomSelectProps<Option, IsMulti, Group>) => {
@@ -53,7 +55,10 @@ const CustomSelect = <
       {label && (
         <label
           htmlFor="first_name"
-          className="block mb-2 text-sm font-medium text-gray-900 "
+          className={clsx(
+            'block mb-2 text-sm font-medium text-gray-900',
+            labelClassNames,
+          )}
         >
           {label}
         </label>

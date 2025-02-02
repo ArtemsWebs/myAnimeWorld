@@ -6,25 +6,28 @@ datasource db {
 generator client {
   provider        = "prisma-client-js"
   binaryTargets   = ["native", "rhel-openssl-1.0.x"]
-  previewFeatures = ["omitApi"]
+  previewFeatures = ["omitApi", "relationJoins"]
 }
 
 //  This is your Prisma schema file,
 //  learn more about it in the docs: https:
 
 model User {
-  id             String    @id @default(cuid())
-  email          String    @unique
+  id             String      @id @default(cuid())
+  email          String      @unique
   name           String
   image          String?
   hashedPassword String?
-  emailVerified  DateTime? @map("email_verified")
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
-  sessions       Session[] @relation(name: "SessionToUser")
-  accounts       Account[] @relation(name: "AccountToUser")
-  roles          Role[]    @relation(name: "UserToRoles")
+  emailVerified  DateTime?   @map("email_verified")
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  sessions       Session[]   @relation(name: "SessionToUser")
+  accounts       Account[]   @relation(name: "AccountToUser")
+  roles          Role[]      @relation(name: "UserToRoles")
   userImage      File?
+  userInfoId     Int?
+  UserInfo       UserInfo?
+  UserFriend     UserFriend?
 }
 
 model Account {
@@ -92,6 +95,10 @@ model Animes {
   licensors     Licensors[]
   producers     Producers[]
   studios       Studios[]
+  UserInfo      UserInfo?   @relation(fields: [userInfoId], references: [id])
+  userInfoId    Int?
+  File          File?       @relation(fields: [fileId], references: [id])
+  fileId        Int?
 }
 
 model Genres {
@@ -104,24 +111,21 @@ model Genres {
 }
 
 model Licensors {
-  id               Int      @id @default(autoincrement())
-  malId            Int
-  type             String
-  name             String
-  url              String
-  animesId         String?
-  licensorsAnimeId String?
-  animes           Animes[]
+  id     Int      @id @default(autoincrement())
+  malId  Int
+  type   String
+  name   String
+  url    String
+  animes Animes[]
 }
 
 model Producers {
-  id       Int      @id @default(autoincrement())
-  malId    Int
-  type     String
-  name     String
-  url      String
-  animesId String?
-  animes   Animes[]
+  id     Int      @id @default(autoincrement())
+  malId  Int
+  type   String
+  name   String
+  url    String
+  animes Animes[]
 }
 
 model Studios {
@@ -131,6 +135,29 @@ model Studios {
   name   String
   url    String
   animes Animes[]
+}
+
+model UserInfo {
+  id               Int          @id @default(autoincrement())
+  user             User?        @relation(fields: [userId], references: [id])
+  userId           String?      @unique
+  status           String?
+  linkToTelegram   String?
+  linkToInstagram  String?
+  linkToVk         String?
+  linkToFaceBook   String?
+  watchingAnimes   Animes[]
+  lastTimeOnSite   DateTime
+  animesTokenCount Int
+  UserFriend       UserFriend[]
+}
+
+model UserFriend {
+  id         Int      @id @default(autoincrement())
+  user       User?    @relation(fields: [userId], references: [id])
+  userId     String?  @unique
+  info       UserInfo @relation(fields: [userInfoId], references: [id])
+  userInfoId Int
 }
 
 model Dubbers {
@@ -161,11 +188,12 @@ model Role {
 }
 
 model File {
-  id           Int     @id @default(autoincrement())
+  id           Int      @id @default(autoincrement())
   bucket       String
-  fileName     String  @unique
+  fileName     String   @unique
   originalName String
   size         Int
-  user         User?   @relation(fields: [userId], references: [id])
-  userId       String? @unique
+  user         User?    @relation(fields: [userId], references: [id])
+  userId       String?  @unique
+  Animes       Animes[]
 }

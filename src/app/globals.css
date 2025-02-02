@@ -1,3 +1,4 @@
+@tailwind variants;
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -5,7 +6,6 @@
 
 html{
   min-height: 100vh;
-  height: 100vh;
 }
 :root {
   --foreground-rgb: 0, 0, 0;
@@ -23,7 +23,6 @@ html{
 
 body {
   color: rgb(var(--foreground-rgb));
-  min-height: 100vh;
   height: 100vh;
   background: linear-gradient(
       to bottom,
@@ -37,6 +36,12 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+}
+/*Класс для враппера текса Визивиги*/
+.wrapperClassName{
+  background-color: white;
+  border-radius: 10px;
+  max-width: 1000px;
 }
 
 .vjs-matrix.video-js {

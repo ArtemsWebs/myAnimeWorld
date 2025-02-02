@@ -41,14 +41,14 @@ export const userRouters = new Elysia({ prefix: '/user' })
     },
   )
   .post(
-    '/create',
+    '/createUser',
     async ({ body }) => {
       return await createUser(body);
     },
     { body: 'user.model.body.create' },
   )
   .put(
-    '/update/:userId',
+    '/updateUser/:userId',
     async ({ params: { userId }, body }) => {
       return await updateUser(userId, body);
     },

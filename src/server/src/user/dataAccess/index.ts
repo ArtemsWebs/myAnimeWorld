@@ -79,6 +79,7 @@ export const updateUserDB = async ({
   uniqueFileName?: string;
   updateFile?: boolean;
 }) => {
+  console.log(body.image);
   try {
     const updatedUser = await prismaDb.user.update({
       where: { id: userId },
@@ -92,7 +93,7 @@ export const updateUserDB = async ({
         updatedAt: new Date().toISOString(),
       },
     });
-    if (body.image && uniqueFileName) {
+    if (body.image?.name && uniqueFileName) {
       await prismaDb.file.upsert({
         where: { userId },
         update: {

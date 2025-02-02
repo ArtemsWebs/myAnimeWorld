@@ -1,0 +1,18 @@
+$sky500: theme("colors.sky.500");
+$sky100: theme("colors.sky.100");
+$sky200: theme("colors.sky.200");
+
+.spoiler{
+    padding: 0 6px;
+    border: 1px dashed $sky200;
+    border-radius: 4px;
+    background: $sky100;
+    &:after{
+      content: " }";
+      color: $sky500;
+    }
+    &:before{
+        content: "{ ";
+        color:$sky500
+    }
+}

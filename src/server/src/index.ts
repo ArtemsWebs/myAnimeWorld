@@ -8,6 +8,9 @@ import { ServerError } from '../lib/serverError';
 import { minioInit } from './minio/index.';
 import { minioRouters } from './minio/entry';
 import swagger from '@elysiajs/swagger';
+import { licensorRouters } from '@/server/src/licensor/entry';
+import { studioRouters } from '@/server/src/studio/entry';
+import { producerRouters } from '@/server/src/producer/entry';
 
 minioInit();
 
@@ -33,6 +36,9 @@ const app = new Elysia({ prefix: '/api/v1' })
   .use(animeRouters)
   .use(genresRouters)
   .use(userRouters)
+  .use(licensorRouters)
+  .use(studioRouters)
+  .use(producerRouters)
   .use(permissionRouters)
   .use(minioRouters)
   .listen(4000);

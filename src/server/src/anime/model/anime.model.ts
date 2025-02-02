@@ -1,4 +1,6 @@
 import { Elysia, t } from 'elysia';
+import { LicensorModelBaseGet } from '@/server/src/licensor/model/licensor.model';
+import { ProducerModelBaseGet } from '@/server/src/producer/model/producer.model';
 
 // {"jpg": {"image_url": "https://cdn.myanimelist.net/images/anime/1876/141251.jpg", "large_image_url": "https://cdn.myanimelist.net/images/anime/1876/141251l.jpg", "small_image_url": "https://cdn.myanimelist.net/images/anime/1876/141251t.jpg"}, "webp": {"image_url": "https://cdn.myanimelist.net/images/anime/1876/141251.webp", "large_image_url": "https://cdn.myanimelist.net/images/anime/1876/141251l.webp", "small_image_url": "https://cdn.myanimelist.net/images/anime/1876/141251t.webp"}}
 
@@ -80,6 +82,8 @@ export const AnimeModelBase = t.Object({
   background: t.MaybeEmpty(t.String()),
   season: t.Nullable(t.String()),
   type: t.Nullable(t.String()),
+  licensors: t.MaybeEmpty(t.Array(LicensorModelBaseGet)),
+  producers: t.MaybeEmpty(t.Array(ProducerModelBaseGet)),
   images: t.Object({
     jpg: t.Optional(InternalLinkImageModel),
     webp: t.Optional(InternalLinkImageModel),
@@ -87,6 +91,17 @@ export const AnimeModelBase = t.Object({
   videoUrl: t.Nullable(t.String()),
   thumbnaiUrl: t.Nullable(t.String()),
   duration: t.Nullable(t.String()),
+});
+
+export const AnimeEditPathBody = t.Object({
+  title: t.MaybeEmpty(t.String()),
+  episodes: t.Nullable(t.Numeric()),
+  rating: t.Nullable(t.String()),
+  licensors: t.MaybeEmpty(t.Array(LicensorModelBaseGet)),
+  producers: t.MaybeEmpty(t.Array(ProducerModelBaseGet)),
+  studios: t.MaybeEmpty(t.Array(StudioModel)),
+  duration: t.Nullable(t.String()),
+  fileId: t.MaybeEmpty(t.Number()),
 });
 
 const AnimeModelSuccessResponse = t.Object({
@@ -108,8 +123,10 @@ const AnimeModelSuccessResponse = t.Object({
 const AnimeAllModelResponse = t.Array(AnimeModelBase);
 
 export type AnimeModelResponse = (typeof AnimeModelBase)['static'];
+export type AnimeModelEditBody = (typeof AnimeEditPathBody)['static'];
 
 export const AnimeModelDTO = new Elysia().model({
   'anime.model': AnimeModelBase,
+  'anime.model.edit': AnimeEditPathBody,
   'animeAll.model.response': AnimeAllModelResponse,
 });

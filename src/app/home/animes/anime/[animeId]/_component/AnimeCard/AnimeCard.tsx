@@ -5,7 +5,9 @@ import AnimePlayer from '@/app/home/animes/anime/[animeId]/_component/AnimePlaye
 import Accordion from '@/app/ui/Accordion/Accordion';
 import CommentTree from '@/app/home/animes/anime/[animeId]/_component/CommentTree/CommentTree';
 import { Suspense } from 'react';
+import { CiEdit } from 'react-icons/ci';
 import { AnimeModelResponse } from '@/server/src/anime/model/anime.model';
+import Link from 'next/link';
 
 interface AnimeCardProps {
   animeFullInfo?: AnimeModelResponse;
@@ -41,7 +43,14 @@ const AnimeCard = ({ animeFullInfo }: AnimeCardProps) => {
           />
           <div className={'w-[700px]'}>
             <div>
-              <Typography variant={'title'}>{animeFullInfo?.title}</Typography>
+              <div className="flex gap-5 justify-start">
+                <Typography variant={'title'}>
+                  {animeFullInfo?.title}
+                </Typography>
+                <Link href={`/home/animes/anime/${animeFullInfo?.id}/edit`}>
+                  <CiEdit size={40} />
+                </Link>
+              </div>
               <div className={'flex gap-3'}>
                 {animeFullInfo?.genres?.map((gener) => (
                   <Chips key={gener.malId} chipsName={gener.name} />

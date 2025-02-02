@@ -60,7 +60,7 @@ const LayoutBackgroundWrapper = ({
       }}
       className={
         isAuth
-          ? `relative animated h-full w-full bg-[url(/image/yanderes.avif)] bg-cover bg-repeat-round`
+          ? `relative animated w-full bg-[url(/image/yanderes.avif)] bg-cover bg-repeat-round h-[100vh]`
           : `relative animated h-full w-full bg-[#323232] bg-cover bg-repeat-round origin-`
       }
     >

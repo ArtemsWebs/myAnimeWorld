@@ -1,5 +1,5 @@
 import { Elysia, t } from 'elysia';
-import { getAnime, getAnimes } from '../domain';
+import { editAnimeByIdDomain, getAnime, getAnimes } from '../domain';
 import {
   AnimeModelDTO,
   AnimeModelResponse,
@@ -30,6 +30,19 @@ export const animeRouters = new Elysia({ prefix: '/animes' })
       params: t.Object({
         animeId: t.Numeric(),
       }),
+      response: 'anime.model',
+    },
+  )
+  .patch(
+    '/anime/edit/:animeId',
+    async ({ params: { animeId }, body }) => {
+      return await editAnimeByIdDomain(animeId, body);
+    },
+    {
+      params: t.Object({
+        animeId: t.Numeric(),
+      }),
+      body: 'anime.model.edit',
       response: 'anime.model',
     },
   );

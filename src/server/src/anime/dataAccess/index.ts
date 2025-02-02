@@ -1,8 +1,13 @@
 import prismaDb from '../../../../../lib/prismaDb';
 import { AnimeT } from './types';
+import { AnimeModelEditBody } from '@/server/src/anime/model/anime.model';
 
 export const getAnimesDB = async (offset: number, limit: number) => {
   const animes = await prismaDb.animes.findMany({
+    include: {
+      producers: true,
+      licensors: true,
+    },
     take: limit,
     skip: limit * offset - limit,
     orderBy: {
@@ -205,4 +210,11 @@ export const createNewAnime = async (animeData: AnimeT) => {
     },
   });
   return newAnime;
+};
+
+export const editAnimeByIdDb = (animeId: number, body: AnimeModelEditBody) => {
+  return prismaDb.animes.update({
+    where: { id: animeId },
+    data: { ...body },
+  });
 };

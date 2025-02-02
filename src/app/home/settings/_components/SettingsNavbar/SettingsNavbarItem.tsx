@@ -1,3 +1,4 @@
+'use client';
 import { NavbarItem } from '@/app/home/settings/_components/SettingsNavbar/type';
 import Typography from '@/app/ui/Typography';
 import Link from 'next/link';

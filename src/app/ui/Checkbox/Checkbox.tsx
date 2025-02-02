@@ -14,15 +14,15 @@ interface CheckboxProps
   onChange: (value: boolean) => void;
 }
 
-const Checkbox: ForwardRefRenderFunction<HTMLInputElement, CheckboxProps> = ({
-  label,
-  onChange,
-  ...props
-}: CheckboxProps) => {
+const Checkbox: ForwardRefRenderFunction<HTMLInputElement, CheckboxProps> = (
+  { label, onChange, ...props },
+  ref,
+) => {
   return (
     <div className={classes['checkbox-container']}>
       <input
         {...props}
+        ref={ref}
         name="defaultRoleCheckbox"
         id="defaultRoleCheckbox"
         type="checkbox"

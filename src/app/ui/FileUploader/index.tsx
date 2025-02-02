@@ -10,6 +10,7 @@ interface FileUploaderProps {
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   files: FileList | null;
   classNames?: string;
+  imgClassNames?: string;
   isMulti?: boolean;
   labelText?: string;
   onReset: () => void;
@@ -21,6 +22,7 @@ const FileUploader = ({
   files,
   onReset,
   classNames,
+  imgClassNames,
   isMulti,
 }: FileUploaderProps) => {
   const showImagePreview = !isMulti && !!files?.[0];
@@ -49,7 +51,7 @@ const FileUploader = ({
         </label>
       </Show>
       <Show when={showImagePreview}>
-        <div className={'w-1/2 flex justify-center relative '}>
+        <div className={clsx('flex justify-center relative', imgClassNames)}>
           <div
             onClick={() => {
               inputRef?.current?.click?.();
@@ -66,7 +68,10 @@ const FileUploader = ({
           </div>
           <img
             src={files?.[0] ? URL.createObjectURL(files?.[0]) : ''}
-            className={'rounded-lg h-[256px] w-[256px] object-cover'}
+            className={clsx(
+              'rounded-lg h-[256px] w-[256px] object-cover',
+              imgClassNames,
+            )}
           />
         </div>
       </Show>

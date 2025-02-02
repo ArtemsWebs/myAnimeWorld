@@ -13,8 +13,15 @@ export const createGenres = (foreignGenres: any) => {
   });
 };
 
+export const getAllGenres = () => {
+  return prismaDb.genres.findMany();
+};
+
 export const getGenresForAnime = (animeId: number) => {
   return prismaDb.genres.findMany({
-    where: { animes: { id: animeId } },
+    include: {
+      animes: true,
+    },
+    where: { animes: { some: { id: animeId } } },
   });
 };

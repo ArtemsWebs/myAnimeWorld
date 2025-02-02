@@ -23,13 +23,11 @@ const Accordion = ({
       {...props}
       className={classNames(
         className,
-        'w-full min-h-5 bg-gray-400 rounded-lg px-6 py-6',
+        'w-full min-h-5 bg-gray-400 rounded-lg px-6 py-6 text-white',
       )}
     >
       <div className={'flex justify-between items-center gap-10'}>
-        <Typography variant={'title'} className={'text-white'}>
-          {title}
-        </Typography>
+        <Typography variant={'title'}>{title}</Typography>
         <IconButton
           className={`transition duration-300 ${visibleContent ? 'rotate-0' : 'rotate-180'}`}
           onClick={() => setVisibleContent((prevState) => !prevState)}
@@ -37,7 +35,9 @@ const Accordion = ({
           <IoIosArrowDown width={'24px'} height={'24px'} />
         </IconButton>
       </div>
-      <Show when={visibleContent}>{children}</Show>
+      <Show when={visibleContent}>
+        <div className={'pl-3'}>{children}</div>
+      </Show>
     </div>
   );
 };

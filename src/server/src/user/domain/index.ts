@@ -76,7 +76,7 @@ export const updateUser = async (userId: string, body: UserModelBodyUpdate) => {
   return await updateUserDB({
     userId,
     body: userWithHashedPassword,
-    updateFile: true,
+    updateFile: !!userPhoto?.fileName,
   });
 };
 

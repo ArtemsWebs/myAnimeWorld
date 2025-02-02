@@ -17,6 +17,7 @@ interface BaseModalInputProps
   onChange: (e: FormEvent<HTMLInputElement>) => void;
   className?: string;
   inputStyles?: string;
+  labelClassNames?: string;
   errorText?: string;
 }
 
@@ -29,6 +30,7 @@ const BaseModalInput: ForwardRefRenderFunction<
     onChange,
     errorText,
     inputStyles,
+    labelClassNames,
     className,
     type = 'text',
     ...props
@@ -39,7 +41,10 @@ const BaseModalInput: ForwardRefRenderFunction<
     <div className={className}>
       <label
         htmlFor="first_name"
-        className="block mb-2 text-sm font-medium text-gray-900 "
+        className={clsx(
+          'block mb-2 text-sm font-medium text-gray-900',
+          labelClassNames,
+        )}
       >
         {label}
       </label>

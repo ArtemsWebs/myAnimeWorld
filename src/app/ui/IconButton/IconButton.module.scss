@@ -1,3 +1,7 @@
+$green500: theme("colors.green.500");
+$green100: theme("colors.green.100");
+$gray200: theme("colors.gray.200");
+
 .icon-wrapper{
     cursor: pointer;
     display: flex;
@@ -7,9 +11,21 @@
     transition-duration: 200ms;
     border-radius: 4px;
     :hover{
-        backdrop-filter: invert(10%);
+        background:$gray200;
         transition: 0.4s;
+        border-radius: 4px;
     }
+}
+.active{
+    :hover{
+        background: $green100;
+        transition: 0.4s;
+        border-radius: 4px;
+    }
+}
+.active svg{
+    color: $green500;
+
 }
 .icon-wrapper svg{
     width: 24px;
